@@ -36,5 +36,5 @@ Route::resource('posts', PostController::class)->only([
 ]);
 
 Route::resource('products', ProductController::class)->only([
-    'show', 'store', 'update', 'destroy'
+    'create', 'show', 'store', 'update', 'destroy'
 ]);
