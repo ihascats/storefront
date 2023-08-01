@@ -13,6 +13,6 @@
     </head> 
     <body class="antialiased">
         <h1 class="bg-slate-500">TEST<h1>
-        <a class="bg-blue-500" href="/home">HOME URL<a>
+        <a class="bg-blue-500" href="/dashboard">HOME URL<a>
     </body>
 </html>
