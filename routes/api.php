@@ -37,4 +37,4 @@ Route::resource('posts', PostController::class)->only([
 
 Route::resource('products', ProductController::class)->only([
     'create', 'show', 'store', 'update', 'destroy'
-]);
+])->middleware('auth');
