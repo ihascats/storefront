@@ -9,18 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+    public function up()
+    {        
+        Schema::create('products', function (Blueprint $collection) {
+            $collection->id();
+            $collection->index('name');
+            $collection->string('slug');
+            $collection->string('description');
+            $collection->array('specifications');
+            $collection->array('price_history');
+            $collection->json('discount');
+            $collection->integer('wishlist_count');
+            $collection->array('categories');
+            $collection->array('variants');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('products');
     }

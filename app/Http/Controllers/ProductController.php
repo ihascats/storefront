@@ -98,56 +98,31 @@ class ProductController extends Controller
 
   public function store(Request $request)
   {
-    $product = new Product;
-
-    $product->name = $request->name; // STRING
-    $product->slug = $request->slug; // STRING
-    $product->description = $request->description; // STRING
-    $product->specifications = $request->specifications; // 
-    //  [ 
-    //    {
-    //      name: string
-    //      description: string
-    //    },
-    //    ...
-    //  ]
-    $product->price_history = $request->price_history; //
-    //  [
-    //    {
-    //      price: int
-    //      date: date 
-    //      discount: bool
-    //    },
-    //    ...
-    //  ]
-    $product->discount = $request->discount; // 
-    // {
-    //    discount: int
-    //    expiration_date: date
-    // }
-    $product->wishlist_count = $request->wishlist_count; // increment / decrement when user adds to a wishlist / removes from
-    $product->categories = $request->categories; // list of categories the product belongs to
-    //  [
-    //    monitor,
-    //    gaming,
-    //    oled,
-    //    ...
-    //  ]
-    $product->variants = $request->variants; // list of objects as described below
-    //  [{red: {
-    //    quantity: int
-    //    sizes: [s, m, l, xl, xxl]
-    //  }}, ...]
-
-    //  AGGREGATIONS
-    //  -----------------------------
-    //  total_quantity get 
-    //  rating
-    //  price
-    //  reviews
-    //  -----------------------------
-
-    $product->save();
+    Product::create([
+      'name' => $request->name,
+      'slug' => $request->slug,
+      'description' => $request->description,
+      'specifications' => [[
+        'name' => $request->specification_name,
+        'description' => $request->specification_description
+      ]],
+      'price_history' => [[
+        'price' => $request->price_history,
+        'discount' => $request->discount,
+        'date' => 'datetime',
+      ]],
+      'discount' => [
+        'discount' => $request->discount,
+        'expiration_date' => $request->discount_exp_date
+      ],
+      'wishlist_count' => 0,
+      'categories' => explode(', ', $request->categories),
+      'variants' => [[
+        'color' => $request->variant_color,
+        'quantity' => $request->variant_quantity,
+        'sizes' => explode(', ', $request->variant_sizes),
+      ]],
+    ]);
 
     return response()->json(["result" => "ok"], 201);
   }

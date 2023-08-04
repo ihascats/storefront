@@ -19,6 +19,27 @@
     <label>Description  
       <input name="description">
     </label>
+    <label>Specification name  
+      <input name="specification_name">
+    </label>
+    <label>Specification description
+      <input name="specification_description">
+    </label>
+    <label>Discount
+      <input name="discount">
+    </label>
+    <label>Discount exp date
+      <input name="discount_exp_date">
+    </label>
+    <label>Variant color
+      <input name="variant_color">
+    </label>
+    <label>Variant quantity
+      <input name="variant_quantity">
+    </label>
+    <label>Variant sizes
+      <input name="variant_sizes">
+    </label>
     <label>Categories
       <input name="categories">
     </label>
