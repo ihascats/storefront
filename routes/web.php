@@ -32,4 +32,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/product/create', [ProductController::class, 'create'])->middleware(['auth', 'admin']);
 Route::get('/product/{slug}', [ProductController::class, 'show']);
 
+Route::resource('products', ProductController::class)->only([
+    'create', 'show', 'store', 'update', 'destroy'
+])->middleware(['auth', 'admin']);
+
 require __DIR__.'/auth.php';

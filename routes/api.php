@@ -35,6 +35,6 @@ Route::resource('posts', PostController::class)->only([
    'destroy', 'show', 'store', 'update'
 ]);
 
-Route::resource('products', ProductController::class)->only([
-    'create', 'show', 'store', 'update', 'destroy'
-])->middleware('auth');
+// Route::resource('products', ProductController::class)->only([
+//     'create', 'show', 'store', 'update', 'destroy'
+// ])->middleware(['auth:sanctum.user', 'admin']);
