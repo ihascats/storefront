@@ -45,5 +45,12 @@
     </label>
     <button>Submit</button>
   </form>
+  @if($categories)
+    @foreach ( $categories as $category)
+      <div>
+        {{ $category }}
+      <div>
+    @endforeach
+  @endif
 </body>
 </html>

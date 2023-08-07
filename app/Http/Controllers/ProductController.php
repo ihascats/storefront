@@ -8,7 +8,17 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
   public function create() {
-    return view('product_create');
+    $items = Product::all('categories');
+    $combinedCategories = [];
+    foreach ($items as $item) {
+      $categories = $item->categories;
+      $combinedCategories = array_merge($combinedCategories, $categories);
+    }
+
+    $uniqueCombinedCategories = array_unique($combinedCategories);
+    return view('product_create', [
+      'categories' => $uniqueCombinedCategories,
+    ]);
   }
 
   public function show($slug)
