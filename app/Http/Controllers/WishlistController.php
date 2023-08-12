@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Wishlist;
 
-class Wishlist extends Controller
+class WishlistController extends Controller
 {
-    //
+    public function show($author_id)
+    {
+        $wishlist = Wishlist::where('author_id', '=', $author_id)->first();
+
+        return view('wishlist', [
+            'wishlist' => $wishlist,
+        ]);
+    }
 }

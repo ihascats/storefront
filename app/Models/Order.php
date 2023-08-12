@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Product extends Model
+class Order extends Model
 {
     protected $fillable = [
       'author_id',

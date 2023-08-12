@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Review;
 
-class Review extends Controller
+class ReviewController extends Controller
 {
-    //
+    public function show($id)
+    {
+        $review = Review::where('id', '=', $id)->first();
+
+        return view('review', [
+            'review' => $review,
+        ]);
+    }
 }
