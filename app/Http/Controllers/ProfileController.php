@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,5 +57,21 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+    public function addToCart(Request $request){
+        $user = $request->user();
+        User::find($user->id)->push('cart', [
+            "product_id" => $request->product_id, // Should be objectID
+            "quantity" => $request->quantity
+        ]);
+        return response()->json(["result" => "ok, added item to cart"], 204);
+    }
+    public function removeFromCart(Request $request){
+        $user = $request->user();
+        User::find($user->id)->push('cart', [
+            "product_id" => $request->product_id, // Should be objectID
+            "quantity" => $request->quantity
+        ]);
+        return response()->json(["result" => "ok, removed item from cart"], 204);
     }
 }
