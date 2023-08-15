@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use MongoDB\BSON\ObjectId;
 
 class ProfileController extends Controller
 {
@@ -61,16 +63,16 @@ class ProfileController extends Controller
     public function addToCart(Request $request){
         $user = $request->user();
         User::find($user->id)->push('cart', [
-            "product_id" => $request->product_id, // Should be objectID
-            "quantity" => $request->quantity
+            "product_id" => new ObjectId($request->product_id), // Should be objectID
+            "quantity" => intval($request->quantity)
         ]);
         return response()->json(["result" => "ok, added item to cart"], 204);
     }
     public function removeFromCart(Request $request){
         $user = $request->user();
-        User::find($user->id)->push('cart', [
-            "product_id" => $request->product_id, // Should be objectID
-            "quantity" => $request->quantity
+        User::find($user->id)->pull('cart', [
+            "product_id" => new ObjectId($request->product_id), // Should be objectID
+            "quantity" => intval($request->quantity)
         ]);
         return response()->json(["result" => "ok, removed item from cart"], 204);
     }
