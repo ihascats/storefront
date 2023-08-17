@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function show(Request $request){
-        $user = $request->user();
-        $userCart = User::find($user->id)->cart;
+    public function show($id, Request $request){
+        $userCart = User::find($id)->cart;
 
         $productIds = []; // Collect product IDs from the cart
         foreach ($userCart as $cartItem) {

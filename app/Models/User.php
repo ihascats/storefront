@@ -24,8 +24,10 @@ class User extends Authenticatable
         'password',
         'phone_numbers',
         'shipping_addresses',
+        'cart',
+        'wishlist'
     ];
-
+    
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -35,7 +37,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'admin',
-        'cart'
     ];
 
     /**

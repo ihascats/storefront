@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,5 +44,14 @@ Route::resource('products', ProductController::class)->only([
 Route::resource('orders', OrderController::class)->only([
     'create', 'show', 'store', 'update', 'destroy'
 ])->middleware(['auth', 'admin']);
+
+
+Route::get('/cart', [CartController::class, 'show'])->middleware(['auth']);
+Route::resource('carts', CartController::class)->only([
+    'show', 'store', 'update', 'destroy'
+])->middleware(['auth']);
+Route::resource('wishlists', WishlistController::class)->only([
+    'show', 'store', 'update', 'destroy'
+])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

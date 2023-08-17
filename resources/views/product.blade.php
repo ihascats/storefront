@@ -18,8 +18,8 @@
    @endforeach
    @foreach ($product->price_history as $price_history)
       <div>Price: {{$price_history['price']}}</div>
-      <div>Date of when the price was set:{{$price_history['date']->toDateTime()->format("d M Y")}}</div>
-      <div>Was the discount applied: {{$price_history['discount'] ? 'yes' : 'no'}}</div>
+      {{-- <div>Date of when the price was set:{{$price_history['date']->toDateTime()->format("d M Y")}}</div> --}}
+      {{-- <div>Was the discount applied: {{$price_history['discount'] ? 'yes' : 'no'}}</div> --}}
    @endforeach
    @foreach ($product->discount as $discount)
       <div>{{$discount}}</div>
@@ -36,5 +36,17 @@
          <div>{{implode(', ', $variant['sizes'])}}</div>
       </ul>
    @endforeach
+   <form  method="POST" action="{{ route('profile.addToCart') }}" class="flex flex-col">
+      @csrf
+      @method('PUT')
+      <input name="product_id" value={{$product->id}}>
+      <input name="quantity" value='1' type="number" min="0" max={{$total_quantity}}>
+      <button>Submit</button>
+   </form>
+   <form  method="POST" action="{{ route('wishlists.store') }}" class="flex flex-col">
+      @csrf
+      <input name="product_id" value={{$product->id}}>
+      <button>Add To Wishlist</button>
+   </form>
 </body>
 </html>

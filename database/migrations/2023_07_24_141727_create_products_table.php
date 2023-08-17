@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $collection) {
             $collection->id();
             $collection->index('name');
-            $collection->string('slug');
+            $collection->string('slug')->unique();
             $collection->string('description');
             $collection->array('specifications');
             $collection->array('price_history');
@@ -22,6 +22,7 @@ return new class extends Migration
             $collection->integer('wishlist_count');
             $collection->array('categories');
             $collection->array('variants');
+            $collection->timestamps();
         });
     }
 
