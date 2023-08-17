@@ -30,12 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::put('/profile/add-to-cart', [ProfileController::class, 'addToCart'])->name('profile.addToCart');
-    Route::put('/profile/remove-from-cart', [ProfileController::class, 'removeFromCart'])->name('profile.removeFromCart');
 });
-
-Route::get('/product/create', [ProductController::class, 'create'])->middleware(['auth', 'admin']);
-Route::get('/product/{slug}', [ProductController::class, 'show']);
 
 Route::resource('products', ProductController::class)->only([
     'create', 'show', 'store', 'update', 'destroy'
@@ -45,13 +40,14 @@ Route::resource('orders', OrderController::class)->only([
     'create', 'show', 'store', 'update', 'destroy'
 ])->middleware(['auth', 'admin']);
 
-
-Route::get('/cart', [CartController::class, 'show'])->middleware(['auth']);
 Route::resource('carts', CartController::class)->only([
     'show', 'store', 'update', 'destroy'
 ])->middleware(['auth']);
-Route::resource('wishlists', WishlistController::class)->only([
-    'show', 'store', 'update', 'destroy'
-])->middleware(['auth']);
+
+Route::get('wishlists/{id}', [WishlistController::class, 'show'])->middleware(['auth', 'checkWishlistOwnership']);
+
+Route::post('wishlists', [WishlistController::class, 'store'])->name('wishlists.store')->middleware('auth');
+
+Route::delete('wishlists/{wishlistItemId}', [WishlistController::class, 'destroy'])->name('wishlists.destroy')->middleware('auth');
 
 require __DIR__.'/auth.php';

@@ -36,7 +36,7 @@
          <div>{{implode(', ', $variant['sizes'])}}</div>
       </ul>
    @endforeach
-   <form  method="POST" action="{{ route('profile.addToCart') }}" class="flex flex-col">
+   <form  method="POST" action="{{ route('carts.store') }}" class="flex flex-col">
       @csrf
       @method('PUT')
       <input name="product_id" value={{$product->id}}>

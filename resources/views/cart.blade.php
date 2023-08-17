@@ -8,6 +8,8 @@
   @foreach ($cart as $cartItem)
       <p>Product: {{ $cartItem['product']->name }}</p>
       <p>Quantity: {{ $cartItem['quantity'] }}</p>
+      <p>Product Price: {{ last($cartItem->price_history)['price'] }}</p>
+      <p>Total Price: {{ last($cartItem->price_history)['price'] * $cartItem['quantity'] }}</p>
   @endforeach
   <form method="POST" action="{{ route('carts.store') }}" class="flex flex-col">
       @csrf
