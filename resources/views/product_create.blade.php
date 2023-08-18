@@ -40,17 +40,19 @@
       <label>Variant sizes
         <input name="variant_sizes">
       </label>
-      <label>Categories
-        <input name="categories">
+      <label for="categories">Categories
+        <ul class="flex flex-col">
+        @if($categories)
+          @foreach ( $categories as $category)
+          <label for='categories[]'>
+            {{ $category }}
+            <input type='checkbox' name='categories[]' value='{{$category}}'>
+          </label>
+          @endforeach
+        @endif
+        </ul>
       </label>
       <button>Submit</button>
     </form>
-    @if($categories)
-      @foreach ( $categories as $category)
-        <div>
-          {{ $category }}
-        <div>
-      @endforeach
-    @endif
   </div>
 </x-app-layout>

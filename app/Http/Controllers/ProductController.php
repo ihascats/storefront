@@ -132,7 +132,7 @@ class ProductController extends Controller
         'expiration_date' => $request->discount_exp_date
       ],
       'wishlist_count' => 0,
-      'categories' => explode(', ', $request->categories),
+      'categories' => $request->categories,
       'variants' => [[
         'color' => $request->variant_color,
         'quantity' => $request->variant_quantity,
