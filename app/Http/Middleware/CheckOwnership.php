@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckWishlistOwnership
+class CheckOwnership
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,6 @@ class CheckWishlistOwnership
     public function handle(Request $request, Closure $next): Response
     {
         $id = $request->route('id');
-        error_log(auth()->user()->id);
-        error_log($id);
         if (auth()->user() &&  auth()->user()->id === $id) {
             return $next($request);
         }

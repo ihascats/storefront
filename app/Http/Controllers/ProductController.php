@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+  public function index(){
+    $allProducts = Product::all();
+    return view('products', [
+      'allProducts' => $allProducts,
+    ]);
+  }
   public function create() {
     $items = Product::all('categories');
     $combinedCategories = [];

@@ -53,7 +53,7 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'checkWishlistOwnership' => \App\Http\Middleware\CheckWishlistOwnership::class,
+        'checkOwnership' => \App\Http\Middleware\CheckOwnership::class,
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

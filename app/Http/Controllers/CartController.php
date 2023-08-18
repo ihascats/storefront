@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use MongoDB\BSON\ObjectId;
 
 class CartController extends Controller
 {
@@ -39,7 +41,7 @@ class CartController extends Controller
             "quantity" => intval($request->quantity)
         ];
 
-        $user_id = $request->user()->id;
+        $user_id = auth()->user()->id;
         $user = User::find($user_id);
 
         $productInCart = null;
@@ -62,11 +64,10 @@ class CartController extends Controller
             return response()->json(["result" => "ok, increased quantity"], 204);
         }
     }
-    public function delete($product_id, Request $request){
-        $user = $request->user();
+    public function destroy($product_id, Request $request){
+        $user = auth()->user();
         User::find($user->id)->pull('cart', [
             "product_id" => new ObjectId($product_id), // Should be objectID
-            "quantity" => intval($request->quantity)
         ]);
         return response()->json(["result" => "ok, removed item from cart"], 204);
     }

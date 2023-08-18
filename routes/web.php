@@ -32,19 +32,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('products', [ProductController::class, 'index'])->name('products');
+
 Route::resource('products', ProductController::class)->only([
-    'create', 'show', 'store', 'update', 'destroy'
+    'create', 'store', 'update', 'destroy'
 ])->middleware(['auth', 'admin']);
+
+Route::get('products/{id}', [ProductController::class, 'show']);
+
 
 Route::resource('orders', OrderController::class)->only([
     'create', 'show', 'store', 'update', 'destroy'
 ])->middleware(['auth', 'admin']);
 
 Route::resource('carts', CartController::class)->only([
-    'show', 'store', 'update', 'destroy'
+    'store', 'update', 'destroy'
 ])->middleware(['auth']);
 
-Route::get('wishlists/{id}', [WishlistController::class, 'show'])->middleware(['auth', 'checkWishlistOwnership']);
+Route::get('carts/{id}', [CartController::class, 'show'])->middleware(['auth', 'checkOwnership'])->name('carts');
+
+Route::get('wishlists/{id}', [WishlistController::class, 'show'])->middleware(['auth', 'checkOwnership'])->name('wishlists');
 
 Route::post('wishlists', [WishlistController::class, 'store'])->name('wishlists.store')->middleware('auth');
 

@@ -16,6 +16,28 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('wishlists', ['id' => auth()->user()->id])" :active="request()->routeIs('dashboard')">
+                        {{ __('Wishlist') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('carts', ['id' => auth()->user()->id])" :active="request()->routeIs('dashboard')">
+                        {{ __('Cart') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('products')" :active="request()->routeIs('dashboard')">
+                        {{ __('Products') }}
+                    </x-nav-link>
+                </div>
+                @if(auth()->user()->admin)
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('products.create')" :active="request()->routeIs('dashboard')">
+                            {{ __('New Product') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->
