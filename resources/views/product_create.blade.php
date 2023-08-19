@@ -1,8 +1,8 @@
 <x-app-layout>
   <x-slot name="header">
-      <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-          {{ __('Create New Product') }}
-      </h2>
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+      {{ __('Create New Product') }}
+    </h2>
   </x-slot>
   <div class="bg-neutral-900 text-white">
     <form  method="POST" action="{{ route('products.store') }}" class="flex flex-col">
@@ -40,8 +40,15 @@
       <label>Variant sizes
         <input name="variant_sizes">
       </label>
+      <label for="new_category">
+        New Category
+        <input name="new_category" id="new_category" type="text">
+        <button id="addCategory" type="button">
+          add
+        </button>
+      </label>
       <label for="categories">Categories
-        <ul class="flex flex-col">
+        <ul id="categoriesList" class="flex flex-col">
         @if($categories)
           @foreach ( $categories as $category)
           <label for='categories[]'>
