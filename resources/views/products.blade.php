@@ -4,13 +4,16 @@
             {{ __('Products') }}
         </h2>
     </x-slot>
-    <div class="bg-neutral-900 text-white">
-      @foreach ($allProducts as $product)
-          <a href="/products/{{$product->slug}}">
-            <p>Product: {{ $product->name }}</p>
-            
-            <p>Price: {{ last($product->price_history)['price'] }}</p>
-          </a>
-      @endforeach
+    <div class="flex">
+      @include('components.search')
+      <div class="bg-neutral-900 text-white">
+        @foreach ($allProducts as $product)
+            <a href="/products/{{$product->slug}}">
+              <p>Product: {{ $product->name }}</p>
+              
+              <p>Price: {{ last($product->price_history)['price'] }}</p>
+            </a>
+        @endforeach
+      </div>
     </div>
 </x-app-layout>
