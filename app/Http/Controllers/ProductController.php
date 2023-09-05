@@ -7,6 +7,65 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+  public function search(Request $request){
+
+    $query = Product::query();
+
+    $searchQuery = implode('%', explode(' ', trim($request->input('query'))));
+    // Search Query
+    if ($request->has('query') && trim($request->input('query')) !== '') {
+      $query->where('name', 'like', '%' . $searchQuery . '%');
+    }
+
+    // Price Range
+    if ($request->has('min-price') && $request->has('max-price')) {
+        $minPrice = (float)$request->input('min-price');
+        $maxPrice = (float)$request->input('max-price');
+        $query->whereBetween('price_history.0.price', [$minPrice, $maxPrice]);
+    }
+
+
+    // Categories
+    if ($request->has('categories')) {
+      $categories = $request->input('categories');
+      $query->where(function ($query) use ($categories) {
+        foreach ($categories as $category) {
+            $query->where('categories', 'all', [$category]);
+        }
+      });
+    }
+
+    // // Sizes
+    if ($request->has('sizes')) {
+        $sizes = $request->input('sizes');
+        $query->where(function ($query) use ($sizes) {
+          foreach ($sizes as $size) {
+              $query->where('variants.0.sizes', $size);
+          }
+        });
+    }
+
+    // // Colors
+    if ($request->has('colors')) {
+        $colors = $request->input('colors');
+        $query->where(function ($query) use ($colors) {
+            foreach ($colors as $color) {
+                $query->where('variants.0.color', $color);
+            }
+        });
+    }
+
+    // Execute the query
+    $products = $query->get();
+    
+    if (count($products) === 0){
+      // should show user that theres 0 matches for this query
+    }
+    return view('products', [
+      'allProducts' => $products,
+      'request' => $request
+    ]);
+  }
   public function index(){
     $allProducts = Product::all();
     return view('products', [
@@ -123,8 +182,8 @@ class ProductController extends Controller
         'description' => $request->specification_description
       ]],
       'price_history' => [[
-        'price' => $request->price_history,
-        'discount' => $request->discount,
+        'price' => intval($request->price_history),
+        'discount' => intval($request->discount),
         'date' => 'datetime',
       ]],
       'discount' => [

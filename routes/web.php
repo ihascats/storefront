@@ -39,6 +39,7 @@ Route::resource('products', ProductController::class)->only([
 ])->middleware(['auth', 'admin']);
 
 Route::get('products/{id}', [ProductController::class, 'show']);
+Route::get('search', [ProductController::class, 'search']);
 
 
 Route::resource('orders', OrderController::class)->only([
