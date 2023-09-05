@@ -5,37 +5,34 @@
             <div class="flex items-center">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('products') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="auth()->check() ? route('wishlists', ['id' => auth()->user()->id]) : '#'"
-                    :active="request()->routeIs('dashboard')">
-                        {{ __('Wishlist') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="auth()->check() ? route('carts', ['id' => auth()->user()->id]) : '#'" :active="request()->routeIs('dashboard')">
-                        {{ __('Cart') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('products')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('products')" :active="request()->routeIs('products')">
                         {{ __('Products') }}
+                    </x-nav-link>
+                </div>
+                @if(auth()->check())
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="auth()->check() ? route('wishlists', ['id' => auth()->user()->id]) : '#'"
+                        :active="request()->routeIs('wishlists')">
+                            {{ __('Wishlist') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="auth()->check() ? route('carts', ['id' => auth()->user()->id]) : '#'" :active="request()->routeIs('carts')">
+                        {{ __('Cart') }}
                     </x-nav-link>
                 </div>
                 @if(auth()->check())
                     @if(auth()->user()->admin)
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <x-nav-link :href="route('products.create')" :active="request()->routeIs('dashboard')">
+                            <x-nav-link :href="route('products.create')" :active="request()->routeIs('products.create')">
                                 {{ __('New Product') }}
                             </x-nav-link>
                         </div>
@@ -66,15 +63,36 @@
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                        @if(auth()->check())
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
+                                <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault();
+                                                    this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        @else
+                            <form method="GET" action="{{ route('register') }}">
+                                @csrf
+
+                                <x-dropdown-link :href="route('register')"
+                                        onclick="event.preventDefault();
+                                                    this.closest('form').submit();">
+                                    {{ __('Register') }}
+                                </x-dropdown-link>
+                            </form>
+                            <form method="GET" action="{{ route('login') }}">
+                                @csrf
+
+                                <x-dropdown-link :href="route('login')"
+                                        onclick="event.preventDefault();
+                                                    this.closest('form').submit();">
+                                    {{ __('Login') }}
+                                </x-dropdown-link>
+                            </form>
+                        @endif
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -93,31 +111,28 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        @if(auth()->check())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="auth()->check() ? route('wishlists', ['id' => auth()->user()->id]) : '#'"
+                :active="request()->routeIs('wishlists')">
+                    {{ __('Wishlist') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="auth()->check() ? route('wishlists', ['id' => auth()->user()->id]) : '#'"
-            :active="request()->routeIs('dashboard')">
-                {{ __('Wishlist') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="auth()->check() ? route('carts', ['id' => auth()->user()->id]) : '#'" :active="request()->routeIs('dashboard')">
-                {{ __('Cart') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('products')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('products')" :active="request()->routeIs('products')">
                 {{ __('Products') }}
+            </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="auth()->check() ? route('carts', ['id' => auth()->user()->id]) : '#'" :active="request()->routeIs('carts')">
+                {{ __('Cart') }}
             </x-responsive-nav-link>
         </div>
         @if(auth()->check())
             @if(auth()->user()->admin)
                 <div class="pt-2 pb-3 space-y-1">
-                    <x-responsive-nav-link :href="route('products.create')" :active="request()->routeIs('dashboard')">
+                    <x-responsive-nav-link :href="route('products.create')" :active="request()->routeIs('products.create')">
                         {{ __('New Product') }}
                     </x-responsive-nav-link>
                 </div>
@@ -138,15 +153,36 @@
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+                @if(auth()->check())
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
 
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
+                        <x-responsive-nav-link :href="route('logout')"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Log Out') }}
+                        </x-responsive-nav-link>
+                    </form>
+                @else
+                    <form method="GET" action="{{ route('register') }}">
+                        @csrf
+
+                        <x-responsive-nav-link :href="route('register')"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Register') }}
+                        </x-responsive-nav-link>
+                    </form>
+                    <form method="GET" action="{{ route('login') }}">
+                        @csrf
+
+                        <x-responsive-nav-link :href="route('login')"
+                                onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Login') }}
+                        </x-responsive-nav-link>
+                    </form>
+                @endif
             </div>
         </div>
     </div>
