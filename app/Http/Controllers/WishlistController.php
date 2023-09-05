@@ -37,14 +37,22 @@ class WishlistController extends Controller
     }
     public function store(Request $request){
         $user = User::find($request->user()->id);
-        $user->push('wishlist', new ObjectId($request->product_id));
-
+        $productId = new ObjectId($request->product_id);
+        if (!in_array($productId, $user->wishlist)) {
+            $user->push('wishlist', $productId);
+            Product::find($request->product_id)->increment('wishlist_count');
+        }
         return response()->json(["result" => "ok"], 201);
     }
     public function destroy($wishlistItemId)
     {
         $user = User::find(auth()->user()->id);
-        $user->pull('wishlist', new ObjectId($wishlistItemId));
+        $productId = new ObjectId($wishlistItemId);
+
+        if (in_array($productId, $user->wishlist)) {
+            $user->pull('wishlist', $productId);
+            Product::find($wishlistItemId)->decrement('wishlist_count');
+        }
 
         return response()->json(["result" => "ok"], 204);
     }

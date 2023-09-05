@@ -17,8 +17,7 @@ return new class extends Migration
             $collection->string('slug')->unique();
             $collection->string('description');
             $collection->array('specifications');
-            $collection->array('price_history');
-            $collection->json('discount');
+            $collection->array('price_details');
             $collection->integer('wishlist_count');
             $collection->array('categories');
             $collection->array('variants');

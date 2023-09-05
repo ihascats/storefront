@@ -11,7 +11,7 @@
             <a href="/products/{{$product->slug}}">
               <p>Product: {{ $product->name }}</p>
               
-              <p>Price: {{ last($product->price_history)['price'] }}</p>
+              <p>Price: {{ $product->price_details['price'] }}</p>
             </a>
         @endforeach
       </div>

@@ -97,8 +97,7 @@ class ProductController extends Controller
     //  -----------------------------
     $product = Product::where('slug', '=', $slug)->first();
     $total_quantity = array_sum($product::max('variants.quantity'));
-    $array_of_prices = $product::max('price_history.price');
-    $price = end($array_of_prices);
+    $price = $product->price_details['price'];
     // $reviews = Reviews::where('product_id', '=', $product->id);
     // $rating = array_sum(Reviews::where('product_id', '=', $product->id)->avg('rating'));
 
@@ -130,16 +129,18 @@ class ProductController extends Controller
     //    },
     //    ...
     //  ]
-    $request->price_history !== null ? $product->price_history = $request->price_history : null; //
     //  [
-    //    {
-    //      price: int
-    //      date: date 
-    //      discount: bool
-    //    },
-    //    ...
-    //  ]
-    $request->discount !== null ? $product->discount = $request->discount : null; // 
+      //    {
+        //      price: int
+        //      date: date 
+        //      discount: bool
+        //    },
+        //    ...
+        //  ]
+    $request->price !== null ? $product->price_details["price"] = $request->price : null; //
+    $request->currency !== null ? $product->price_details["currency"] = $request->currency : null; // 
+    $request->discount !== null ? $product->price_details["discount"] = $request->discount : null; // 
+    $request->discount_exp_date !== null ? $product->price_details["discount_exp_date"] = $request->discount_exp_date : null; // 
     // {
     //    discount: int
     //    expiration_date: date
@@ -181,14 +182,11 @@ class ProductController extends Controller
         'name' => $request->specification_name,
         'description' => $request->specification_description
       ]],
-      'price_history' => [[
-        'price' => intval($request->price_history),
-        'discount' => intval($request->discount),
-        'date' => 'datetime',
-      ]],
-      'discount' => [
+      'price_details' => [
+        'price' => floatval($request->price),
+        'currency' => $request->currency,
         'discount' => $request->discount,
-        'expiration_date' => $request->discount_exp_date
+        'discount_exp_date' => $request->discount_exp_date
       ],
       'wishlist_count' => 0,
       'categories' => $request->categories,

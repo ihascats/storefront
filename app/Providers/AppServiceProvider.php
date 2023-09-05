@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // Retrieve the unique list of categories from the products
-        $items = Product::all('categories', 'price_history', 'variants', 'sizes');
+        $items = Product::all('categories', 'price_details', 'variants', 'sizes');
         $combinedCategories = [];
         $minPrice = PHP_INT_MAX; // Initialize min price as a high value
         $maxPrice = 0; // Initialize max price as a low value
@@ -34,8 +34,8 @@ class AppServiceProvider extends ServiceProvider
             $combinedCategories = array_merge($combinedCategories, $categories);
 
             // Update min and max prices
-            $minPrice = min($minPrice, $item->price_history[0]['price']);
-            $maxPrice = max($maxPrice, $item->price_history[0]['price']);
+            $minPrice = min($minPrice, $item->price_details['price']);
+            $maxPrice = max($maxPrice, $item->price_details['price']);
 
             // Collect sizes and colors
             foreach ($item->variants as $variant) {

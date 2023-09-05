@@ -14,7 +14,10 @@
         <input name="slug">
       </label>
       <label>Price  
-        <input name="price_history">
+        <input name="price">
+      </label>
+      <label>Currency  
+        <input name="currency">
       </label>
       <label>Description  
         <input name="description">
