@@ -4,7 +4,7 @@
          {{ $product->name }}
       </h2>
    </x-slot>
-   <div class="bg-neutral-900 text-white">
+   <div class="bg-neutral-900 text-white p-4 max-w-7xl mx-auto">
       <h1>TOTAL QUANTITY: {{$total_quantity}}</h1>
       <h1>Price: ${{$price}}</h1>
       <h1>Name: {{$product->name}}</h1>
@@ -39,13 +39,13 @@
       @endforeach
       <form  method="POST" action="{{ route('carts.store') }}" class="flex flex-col">
          @csrf
-         <input name="product_id" value={{$product->id}}>
-         <input name="quantity" value='1' type="number" min="0" max={{$total_quantity}}>
+         <input name="product_id" value={{$product->id}} class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7">
+         <input name="quantity" value='1' type="number" min="0" max={{$total_quantity}} class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7">
          <button>Add To Cart</button>
       </form>
       <form  method="POST" action="{{ route('wishlists.store') }}" class="flex flex-col">
          @csrf
-         <input name="product_id" value={{$product->id}}>
+         <input name="product_id" value={{$product->id}} class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7">
          <button>Add To Wishlist</button>
       </form>
    </div>

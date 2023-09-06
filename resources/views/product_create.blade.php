@@ -4,65 +4,71 @@
       {{ __('Create New Product') }}
     </h2>
   </x-slot>
-  <div class="bg-neutral-900 text-white">
-    <form  method="POST" action="{{ route('products.store') }}" class="flex flex-col">
+  <div class="text-white p-4 max-w-7xl mx-auto">
+    <form  method="POST" action="{{ route('products.store') }}" class="flex flex-col gap-3">
       @csrf
-      <label>Name  
-        <input name="name">
+      <label class="flex flex-col tracking-wider">Name  
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="name">
       </label>
-      <label>Slug  
-        <input name="slug">
+      <label class="flex flex-col tracking-wider">Slug  
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="slug">
       </label>
-      <label>Price  
-        <input name="price">
+      <label class="flex flex-col tracking-wider">Price  
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="price">
       </label>
-      <label>Currency  
-        <input name="currency">
+      <label class="flex flex-col tracking-wider">Currency  
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="currency">
       </label>
-      <label>Description  
-        <input name="description">
+      <label class="flex flex-col tracking-wider">Description  
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="description">
       </label>
-      <label>Specification name  
-        <input name="specification_name">
+      <label>Specifications
+        <ul class="pl-2" id="specList">
+          <li class="flex items-end">
+            <label class="flex flex-col tracking-wider w-full">name  
+              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="spec_name" id="spec_name">
+            </label>
+            <label class="flex flex-col tracking-wider w-full">description
+              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="spec_desc" id="spec_desc">
+            </label>
+            <button id="addSpec" type="button" class="bg-orange-600 rounded-md px-4 h-7">add</button>
+          </li>
+        </ul>
       </label>
-      <label>Specification description
-        <input name="specification_description">
+      <label class="flex flex-col tracking-wider">Discount
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount">
       </label>
-      <label>Discount
-        <input name="discount">
+      <label class="flex flex-col tracking-wider">Discount exp date
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
       </label>
-      <label>Discount exp date
-        <input name="discount_exp_date">
+      <label class="flex flex-col tracking-wider">Variant color
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="variant_color">
       </label>
-      <label>Variant color
-        <input name="variant_color">
+      <label class="flex flex-col tracking-wider">Variant quantity
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="variant_quantity">
       </label>
-      <label>Variant quantity
-        <input name="variant_quantity">
+      <label class="flex flex-col tracking-wider">Variant sizes
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="variant_sizes">
       </label>
-      <label>Variant sizes
-        <input name="variant_sizes">
-      </label>
-      <label for="new_category">
-        New Category
-        <input name="new_category" id="new_category" type="text">
-        <button id="addCategory" type="button">
-          add
-        </button>
-      </label>
-      <label for="categories">Categories
+      <label for="categories" class="tracking-wider">Categories
         <ul id="categoriesList" class="flex flex-col">
+          <label for="new_category" class="p-2">
+            <input name="new_category" id="new_category" type="text" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7">
+            <button id="addCategory" type="button" class="bg-orange-600 rounded-md px-4">
+              add
+            </button>
+          </label>
         @if($categories)
           @foreach ( $categories as $category)
-          <label for='categories[]'>
-            {{ $category }}
-            <input type='checkbox' name='categories[]' value='{{$category}}'>
+          <label class="pl-2 relative flex gap-2 items-center w-fit">
+            <input type='checkbox' name='categories[]' value='{{$category}}' class="inline float-left">
+            <span>{{ $category }}</span>
           </label>
           @endforeach
         @endif
         </ul>
       </label>
-      <button>Submit</button>
+      <button class="bg-green-600 rounded-md py-2 text-3xl tracking-wider">Submit</button>
     </form>
   </div>
 </x-app-layout>

@@ -6,7 +6,7 @@
     </x-slot>
     <div class="flex">
       @include('components.search')
-      <div class="bg-neutral-900 text-white">
+      <div class="bg-neutral-900 text-white p-4 max-w-7xl w-full">
         @foreach ($allProducts as $product)
             <a href="/products/{{$product->slug}}">
               <p>Product: {{ $product->name }}</p>

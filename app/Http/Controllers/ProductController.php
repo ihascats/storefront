@@ -174,14 +174,33 @@ class ProductController extends Controller
 
   public function store(Request $request)
   {
+    $combinedSpecifications = [];
+    $currentSpec = null;
+
+    foreach ($request->specifications as $spec) {
+        if (isset($spec['name'])) {
+            if ($currentSpec !== null) {
+                $combinedSpecifications[] = $currentSpec;
+            }
+            $currentSpec = ['name' => $spec['name']];
+        } elseif (isset($spec['description'])) {
+            $currentSpec['description'] = $spec['description'];
+        }
+    }
+
+    if ($currentSpec !== null) {
+        $combinedSpecifications[] = $currentSpec;
+    }
+
+    // Now $combinedSpecifications contains the grouped specifications
+
+
+
     Product::create([
       'name' => $request->name,
       'slug' => $request->slug,
       'description' => $request->description,
-      'specifications' => [[
-        'name' => $request->specification_name,
-        'description' => $request->specification_description
-      ]],
+      'specifications' => $combinedSpecifications,
       'price_details' => [
         'price' => floatval($request->price),
         'currency' => $request->currency,
