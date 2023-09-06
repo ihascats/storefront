@@ -6,11 +6,11 @@
     </label>
     <label for="min-price" class="flex flex-col">Min Price:
         <input type="number" name="min-price" id="min-price" step="0.01" min="{{$minPrice}}" max="{{$maxPrice}}" value="{{ isset($request['min-price']) ? $request['min-price'] : $minPrice }}" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7">
-        <input type="range" name="min-priceSlider" id="min-priceSlider" step="0.01" min="{{$minPrice}}" max="{{$maxPrice}}" value="{{ isset($request['min-price']) ? $request['min-price'] : $minPrice }}" class="ml-2 h-7">
+        <input type="range" id="min-priceSlider" step="0.01" min="{{$minPrice}}" max="{{$maxPrice}}" value="{{ isset($request['min-price']) ? $request['min-price'] : $minPrice }}" class="ml-2 h-7">
     </label>
     <label for="max-price" class="flex flex-col">Max Price:
         <input type="number" name="max-price" id="max-price" step="0.01" min="{{$minPrice}}" max="{{$maxPrice}}" value="{{ isset($request['max-price']) ? $request['max-price'] : $maxPrice }}" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7">
-        <input type="range" name="max-priceSlider" id="max-priceSlider" step="0.01" min="{{$minPrice}}" max="{{$maxPrice}}" value="{{ isset($request['max-price']) ? $request['max-price'] : $maxPrice }}" class="ml-2 h-7">
+        <input type="range" id="max-priceSlider" step="0.01" min="{{$minPrice}}" max="{{$maxPrice}}" value="{{ isset($request['max-price']) ? $request['max-price'] : $maxPrice }}" class="ml-2 h-7">
     </label>
 <script>
     // Get references to the input and slider elements
