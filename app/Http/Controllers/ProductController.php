@@ -21,7 +21,7 @@ class ProductController extends Controller
     if ($request->has('min-price') && $request->has('max-price')) {
         $minPrice = (float)$request->input('min-price');
         $maxPrice = (float)$request->input('max-price');
-        $query->whereBetween('price_history.0.price', [$minPrice, $maxPrice]);
+        $query->whereBetween('price_details.price', [$minPrice, $maxPrice]);
     }
 
 
