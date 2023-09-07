@@ -176,25 +176,42 @@ class ProductController extends Controller
   {
     $combinedSpecifications = [];
     $currentSpec = null;
+    if(isset($request->specifications)) {
+      foreach ($request->specifications as $spec) {
+          if (isset($spec['name'])) {
+              if ($currentSpec !== null) {
+                  $combinedSpecifications[] = $currentSpec;
+              }
+              $currentSpec = ['name' => $spec['name']];
+          } elseif (isset($spec['description'])) {
+              $currentSpec['description'] = $spec['description'];
+          }
+      }
 
-    foreach ($request->specifications as $spec) {
-        if (isset($spec['name'])) {
-            if ($currentSpec !== null) {
-                $combinedSpecifications[] = $currentSpec;
-            }
-            $currentSpec = ['name' => $spec['name']];
-        } elseif (isset($spec['description'])) {
-            $currentSpec['description'] = $spec['description'];
-        }
-    }
-
-    if ($currentSpec !== null) {
-        $combinedSpecifications[] = $currentSpec;
+      if ($currentSpec !== null) {
+          $combinedSpecifications[] = $currentSpec;
+      }
     }
 
     // Now $combinedSpecifications contains the grouped specifications
+    $combinedVariations = [];
+    $currentVar = null;
 
-
+    foreach($request->variants as $variant){
+      if (isset($variant['color'])) {
+          if ($currentVar !== null) {
+              $combinedVariations[] = $currentVar;
+          }
+          $currentVar = ['color' => $variant['color']];
+      } elseif (isset($variant['quantity'])) {
+          $currentVar['quantity'] = $variant['quantity'];
+      } elseif (isset($variant['sizes'])) {
+          $currentVar['sizes'] = explode(', ', $variant['sizes']);
+      }
+    }
+    if ($currentVar !== null) {
+        $combinedVariations[] = $currentVar;
+    }
 
     Product::create([
       'name' => $request->name,
@@ -209,11 +226,7 @@ class ProductController extends Controller
       ],
       'wishlist_count' => 0,
       'categories' => $request->categories,
-      'variants' => [[
-        'color' => $request->variant_color,
-        'quantity' => $request->variant_quantity,
-        'sizes' => explode(', ', $request->variant_sizes),
-      ]],
+      'variants' => $combinedVariations,
     ]);
 
     return response()->json(["result" => "ok"], 201);

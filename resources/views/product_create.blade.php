@@ -41,14 +41,21 @@
       <label class="flex flex-col tracking-wider">Discount exp date
         <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
       </label>
-      <label class="flex flex-col tracking-wider">Variant color
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="variant_color">
-      </label>
-      <label class="flex flex-col tracking-wider">Variant quantity
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="variant_quantity">
-      </label>
-      <label class="flex flex-col tracking-wider">Variant sizes
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="variant_sizes">
+      <label>Variant
+          <ul class="flex flex-col tracking-wider" id="variantList">
+            <li class="flex items-end">
+              <label class="flex flex-col tracking-wider w-full">color
+                  <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" id="variant_color">
+              </label>
+              <label class="flex flex-col tracking-wider w-full">quantity
+                  <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" id="variant_quantity">
+              </label>
+              <label class="flex flex-col tracking-wider w-full">sizes
+                  <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" id="variant_sizes">
+              </label>
+              <button id="addVariant" type="button" class="bg-orange-600 rounded-md px-4 h-7">add</button>
+            </li>
+          </ul>
       </label>
       <label for="categories" class="tracking-wider">Categories
         <ul id="categoriesList" class="flex flex-col">

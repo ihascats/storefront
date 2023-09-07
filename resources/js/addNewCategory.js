@@ -93,3 +93,72 @@ function addSpec() {
 }
 
 addSpecButton.addEventListener("click", addSpec);
+
+let variantListContainer = document.getElementById("variantList");
+let addVariantButton = document.getElementById("addVariant");
+let variantColor = document.getElementById("variant_color");
+let variantQuantity = document.getElementById("variant_quantity");
+let variantSizes = document.getElementById("variant_sizes");
+
+function addVariant() {
+    // Create a new list item
+    let newItem = document.createElement("li");
+    newItem.className = "flex items-end";
+
+    // Create a label for 'color'
+    let colorLabel = document.createElement("label");
+    colorLabel.className = "flex flex-col tracking-wider w-full";
+    colorLabel.textContent = "color";
+
+    // Create an input field for 'color'
+    let colorInput = document.createElement("input");
+    colorInput.className =
+        "bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7";
+    colorInput.name = "variants[][color]";
+    colorInput.value = variantColor.value; // Get value from previous field
+    // Append the input field to the 'color' label
+    colorLabel.appendChild(colorInput);
+
+    // Create a label for 'quantity'
+    let quantityLabel = document.createElement("label");
+    quantityLabel.className = "flex flex-col tracking-wider w-full";
+    quantityLabel.textContent = "quantity";
+
+    // Create an input field for 'quantity'
+    let quantityInput = document.createElement("input");
+    quantityInput.className =
+        "bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7";
+    quantityInput.name = "variants[][quantity]";
+    quantityInput.value = variantQuantity.value; // Get value from previous field
+    // Append the input field to the 'quantity' label
+    quantityLabel.appendChild(quantityInput);
+
+    // Create a label for 'sizes'
+    let sizesLabel = document.createElement("label");
+    sizesLabel.className = "flex flex-col tracking-wider w-full";
+    sizesLabel.textContent = "sizes";
+
+    // Create an input field for 'sizes'
+    let sizesInput = document.createElement("input");
+    sizesInput.className =
+        "bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7";
+    sizesInput.name = "variants[][sizes]";
+    sizesInput.value = variantSizes.value; // Get value from previous field
+    // Append the input field to the 'sizes' label
+    sizesLabel.appendChild(sizesInput);
+
+    // Append the 'color' label, 'quantity' label, 'sizes' label, and 'add' button to the list item
+    newItem.appendChild(colorLabel);
+    newItem.appendChild(quantityLabel);
+    newItem.appendChild(sizesLabel);
+
+    // Insert the new list item at the end of the list
+    variantListContainer.appendChild(newItem);
+
+    // Clear the previous input fields
+    variantColor.value = "";
+    variantQuantity.value = "";
+    variantSizes.value = "";
+}
+
+addVariantButton.addEventListener("click", addVariant);
