@@ -84,6 +84,21 @@ function addSpec() {
     newItem.appendChild(nameLabel);
     newItem.appendChild(descLabel);
 
+    // Create a "Delete" button for the variant
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.type = "button";
+    deleteButton.className = "ml-2 h-7 px-4 bg-red-600 text-white rounded-md";
+
+    // Attach a click event listener to the delete button
+    deleteButton.addEventListener("click", function () {
+        // Remove the variant element (newItem) when the delete button is clicked
+        specListContainer.removeChild(newItem);
+    });
+
+    // Append the delete button to the list item
+    newItem.appendChild(deleteButton);
+
     // Insert the new list item after the base list item
     specListContainer.insertBefore(newItem, baseListItem.nextSibling);
 
@@ -166,6 +181,21 @@ function addVariant() {
     newItem.appendChild(colorLabel);
     newItem.appendChild(sizesLabel);
     newItem.appendChild(quantityLabel);
+
+    // Create a "Delete" button for the variant
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.type = "button";
+    deleteButton.className = "ml-2 h-7 px-4 bg-red-600 text-white rounded-md";
+
+    // Attach a click event listener to the delete button
+    deleteButton.addEventListener("click", function () {
+        // Remove the variant element (newItem) when the delete button is clicked
+        variantListContainer.removeChild(newItem);
+    });
+
+    // Append the delete button to the list item
+    newItem.appendChild(deleteButton);
 
     // Insert the new list item at the end of the list
     variantListContainer.appendChild(newItem);

@@ -22,7 +22,7 @@
       <label class="flex flex-col tracking-wider">Description  
         <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="description">
       </label>
-      <label>Specifications
+      <label class="tracking-wider">Specifications
         <ul class="pl-2" id="specList">
           <li class="flex items-end">
             <label class="flex flex-col tracking-wider w-full">name  
@@ -41,7 +41,7 @@
       <label class="flex flex-col tracking-wider">Discount exp date
         <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
       </label>
-      <label class="tracking-wider">Variant
+      <label class="tracking-wider">Variants
         <ul class="flex flex-col tracking-wider pl-2" id="variantList">
             <li class="flex items-start gap-2">
                 <div class="relative w-full mt-[10px]">
@@ -123,7 +123,7 @@
                         @endif
                     </ul>
                 </div>
-                <label class="flex flex-col tracking-wider w-full">Quantity
+                <label class="flex flex-col tracking-wider w-full text-sm mt-1">quantity
                     <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" id="variant_quantity">
                 </label>
                 <button id="addVariant" type="button" class="bg-orange-600 rounded-md px-4 h-7 mt-6">add</button>
@@ -181,4 +181,5 @@
       <button class="bg-green-600 rounded-md py-2 text-3xl tracking-wider">Submit</button>
     </form>
   </div>
+  <div class="bg-red-600"><div>
 </x-app-layout>
