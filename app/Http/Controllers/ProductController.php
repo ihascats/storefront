@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use DateTime;
+use DateTimeZone;
+use MongoDB\BSON\UTCDateTime;
 
 class ProductController extends Controller
 {
@@ -204,7 +207,7 @@ class ProductController extends Controller
           }
           $currentVar['color'] = $variant['color'];
       } elseif (isset($variant['quantity'])) {
-          $currentVar['quantity'] = $variant['quantity'];
+          $currentVar['quantity'] = intval($variant['quantity']);
       } elseif (isset($variant['sizes'])) {
           $currentVar['sizes'] = $variant['sizes'];
       }
@@ -212,21 +215,32 @@ class ProductController extends Controller
     if ($currentVar !== null) {
         $combinedVariations[] = $currentVar;
     }
+    // Get the user's selected local time as a string from the input
+    $localTime = $request->discount_exp_date;
+
+    // Convert the local time to a DateTime object
+    $localDateTime = new DateTime($localTime, new DateTimeZone($request->localTimezone));
+
+    // Convert the local DateTime to UTC DateTime
+    $utcDateTime = $localDateTime->setTimezone(new DateTimeZone('UTC'));
+
+    // Create a UTCDateTime object for MongoDB
+    $discountExpDate = new UTCDateTime($utcDateTime->getTimestamp() * 1000);
 
     Product::create([
-      'name' => $request->name,
-      'slug' => $request->slug,
-      'description' => $request->description,
-      'specifications' => $combinedSpecifications,
-      'price_details' => [
-        'price' => floatval($request->price),
-        'currency' => $request->currency,
-        'discount' => $request->discount,
-        'discount_exp_date' => $request->discount_exp_date
-      ],
-      'wishlist_count' => 0,
-      'categories' => $request->categories,
-      'variants' => $combinedVariations,
+        'name' => $request->name,
+        'slug' => $request->slug,
+        'description' => $request->description,
+        'specifications' => $combinedSpecifications,
+        'price_details' => [
+            'price' => floatval($request->price),
+            'currency' => $request->currency,
+            'discount' => $request->discount,
+            'discount_exp_date' => $discountExpDate
+        ],
+        'wishlist_count' => 0,
+        'categories' => $request->categories,
+        'variants' => $combinedVariations,
     ]);
 
     return response()->json(["result" => "ok"], 201);

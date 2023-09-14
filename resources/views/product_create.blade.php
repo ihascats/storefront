@@ -39,7 +39,7 @@
         <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount">
       </label>
       <label class="flex flex-col tracking-wider">Discount exp date
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
+        <input type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
       </label>
       <label class="tracking-wider -mb-5">Variants</label>
         <ul class="flex flex-col tracking-wider pl-2" id="variantList">
@@ -124,7 +124,7 @@
                     </ul>
                 </div>
                 <label class="flex flex-col tracking-wider w-full text-sm mt-1">quantity
-                    <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" id="variant_quantity">
+                    <input type="number" min="1" value="1" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" id="variant_quantity">
                 </label>
                 <button id="addVariant" type="button" class="bg-orange-600 rounded-md px-4 h-7 mt-6">add</button>
             </li>
@@ -178,6 +178,14 @@
         @endif
         </ul>
       </label>
+      <input id="user-timezone" name="localTimezone" hidden>
+
+      <script>
+         // Detect and store the user's timezone in a JavaScript variable
+         var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+         if (document.querySelector('#user-timezone'))
+            document.querySelector('#user-timezone').value = userTimeZone;
+      </script>
       <button class="bg-green-600 rounded-md py-2 text-3xl tracking-wider">Submit</button>
     </form>
   </div>

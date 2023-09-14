@@ -17,14 +17,46 @@
          </div>
       @endforeach
       <div>Price: {{$price}}</div>
-      @if($product->price_details["discount"] > 0)
+      
+      @if(auth()->user()->admin)
+      <p>Users Timezone: <span id="user-timezone"></span></p>
+      @endif
+
+      <script>
+         // Detect and store the user's timezone in a JavaScript variable
+         var userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+         if (document.querySelector('#user-timezone'))
+            document.querySelector('#user-timezone').textContent = userTimeZone;
+         
+         // Set a cookie with the user's timezone
+         document.cookie = "user_timezone=" + userTimeZone + "; path=/";
+      </script>
+
+      @php
+         $userTimeZone = 'Europe/Belgrade'; // Default to 'Europe/Belgrade' if userTimeZone is not provided
+         if(isset($_COOKIE['user_timezone'])) {
+            $userTimeZone = $_COOKIE['user_timezone'];
+         }
+         
+         $expirationDateUTC = $product->price_details["discount_exp_date"]->toDateTime();
+         $expirationDateLocal = $product->price_details["discount_exp_date"]->toDateTime()->setTimezone(new DateTimeZone($userTimeZone));
+         $currentDate = now()->timezone($userTimeZone); // Current date and time in user's timezone
+      @endphp
+
+      {{-- <p>Expiration Date (UTC): {{$expirationDateUTC->format('Y-m-d H:i:s')}} ({{$expirationDateUTC->getTimezone()->getName()}})</p>
+      <p>Expiration Date (Local): {{$expirationDateLocal->format('Y-m-d H:i:s')}} ({{$expirationDateLocal->getTimezone()->getName()}})</p>
+      <p>Current Date: {{$currentDate->format('Y-m-d H:i:s')}} ({{$currentDate->getTimezone()->getName()}})</p> --}}
+
+      @if($product->price_details["discount"] > 0 && $expirationDateLocal > $currentDate)
          <div>Discount: {{$product->price_details["discount"]}}</div>
          @php
             $discountedPrice = $product->price_details["price"] - ($product->price_details["price"] * ($product->price_details["discount"] / 100));
             $discountedPriceFormatted = number_format($discountedPrice, 2);
          @endphp
          <div>Price after discount: {{$discountedPriceFormatted}}</div>
+         <div>Discount Expiration Date: {{$expirationDateLocal->format('Y-m-d H:i:s')}}</div>
       @endif
+      
       <div>Wishlist count: {{$product->wishlist_count}}</div>
       <h1>Categories:</h1>
       <div class="pl-2">{{implode(', ', $product->categories)}}</div>
