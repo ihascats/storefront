@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
 
             // Collect sizes and colors
             foreach ($item->variants as $variant) {
-                $sizes = array_merge($sizes, $variant['sizes']);
+                $sizes[] = $variant['sizes'];
                 $colors[] = $variant['color'];
             }
         }

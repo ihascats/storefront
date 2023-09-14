@@ -32,10 +32,7 @@
       @foreach ($product->variants as $variant)
          <div>Color: {{$variant['color']}}</div>
          <div>quantity: {{$variant['quantity']}}</div>
-         <h1>Sizes:</h1>
-         <ul class="pl-3">
-            <div>{{implode(', ', $variant['sizes'])}}</div>
-         </ul>
+         <div>Sizes: {{$variant['sizes']}}</div>
       @endforeach
       <form  method="POST" action="{{ route('carts.store') }}" class="flex flex-col">
          @csrf
