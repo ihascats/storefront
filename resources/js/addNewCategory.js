@@ -48,19 +48,21 @@ let specDesc = document.getElementById("spec_desc");
 let baseListItem = document.querySelector("#specList > li"); // Get the base list item
 
 function addSpec() {
+    if (specName.value === "" || specDesc.value === "") return;
+
     // Create a new list item
     let newItem = document.createElement("li");
-    newItem.className = "flex items-end";
+    newItem.className = "flex items-end gap-2";
 
     // Create a label for 'name'
     let nameLabel = document.createElement("label");
-    nameLabel.className = "flex flex-col tracking-wider w-full";
+    nameLabel.className = "flex flex-col tracking-wider w-full text-sm";
     nameLabel.textContent = "name";
 
     // Create an input field for 'name'
     let nameInput = document.createElement("input");
     nameInput.className =
-        "bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7";
+        "bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7";
     nameInput.name = "specifications[][name]"; // Set the name attribute
     nameInput.value = specName.value;
     // Append the input field to the 'name' label
@@ -68,13 +70,13 @@ function addSpec() {
 
     // Create a label for 'description'
     let descLabel = document.createElement("label");
-    descLabel.className = "flex flex-col tracking-wider w-full";
+    descLabel.className = "flex flex-col tracking-wider w-full text-sm";
     descLabel.textContent = "description";
 
     // Create an input field for 'description'
     let descInput = document.createElement("input");
     descInput.className =
-        "bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7";
+        "bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7";
     descInput.name = "specifications[][description]"; // Set the name attribute
     descInput.value = specDesc.value;
     // Append the input field to the 'description' label
@@ -88,7 +90,7 @@ function addSpec() {
     let deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.type = "button";
-    deleteButton.className = "ml-2 h-7 px-4 bg-red-600 text-white rounded-md";
+    deleteButton.className = "h-7 px-4 bg-red-600 text-white rounded-md";
 
     // Attach a click event listener to the delete button
     deleteButton.addEventListener("click", function () {
@@ -130,6 +132,8 @@ function addVariant() {
     var selectedSize = sizesDropdown.querySelector(
         "input[name='sizes[]']:checked"
     );
+
+    if (!selectedColor || !selectedSize || variantQuantity.value === "") return;
 
     // Create a new list item
     let newItem = document.createElement("li");

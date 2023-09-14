@@ -24,12 +24,12 @@
       </label>
       <label class="tracking-wider">Specifications
         <ul class="pl-2" id="specList">
-          <li class="flex items-end">
-            <label class="flex flex-col tracking-wider w-full">name  
-              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="spec_name" id="spec_name">
+          <li class="flex items-end gap-2">
+            <label class="flex flex-col tracking-wider w-full text-sm">name  
+              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="spec_name" id="spec_name">
             </label>
-            <label class="flex flex-col tracking-wider w-full">description
-              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="spec_desc" id="spec_desc">
+            <label class="flex flex-col tracking-wider w-full text-sm">description
+              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="spec_desc" id="spec_desc">
             </label>
             <button id="addSpec" type="button" class="bg-orange-600 rounded-md px-4 h-7">add</button>
           </li>
