@@ -41,7 +41,7 @@
       <label class="flex flex-col tracking-wider">Discount exp date
         <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
       </label>
-      <label class="tracking-wider">Variants
+      <label class="tracking-wider -mb-5">Variants</label>
         <ul class="flex flex-col tracking-wider pl-2" id="variantList">
             <li class="flex items-start gap-2">
                 <div class="relative w-full mt-[10px]">
@@ -159,7 +159,7 @@
             });
           });
         </script>
-      </label>
+
       <label for="categories" class="tracking-wider">Categories
         <ul id="categoriesList" class="flex flex-col">
           <label for="new_category" class="p-2">
