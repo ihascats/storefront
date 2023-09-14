@@ -202,11 +202,11 @@ class ProductController extends Controller
           if ($currentVar !== null) {
               $combinedVariations[] = $currentVar;
           }
-          $currentVar = ['color' => $variant['color']];
+          $currentVar['color'] = $variant['color'];
       } elseif (isset($variant['quantity'])) {
           $currentVar['quantity'] = $variant['quantity'];
       } elseif (isset($variant['sizes'])) {
-          $currentVar['sizes'] = explode(', ', $variant['sizes']);
+          $currentVar['sizes'] = $variant['sizes'];
       }
     }
     if ($currentVar !== null) {
