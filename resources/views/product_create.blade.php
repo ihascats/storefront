@@ -35,12 +35,50 @@
           </li>
         </ul>
       </label>
-      <label class="flex flex-col tracking-wider">Discount
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount">
+      <label class="tracking-wider">Discount
+        <ul class="flex gap-2 pl-2">
+          <label class="flex flex-col tracking-wider text-sm">amount
+            <div class="flex">
+              <input type="number" value="0" min="0" max="100" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7 w-20" name="discount"><span class="text-3xl">%</span>
+            </div>
+          </label>
+          <label class="flex flex-col tracking-wider text-sm">start date
+            <input id="start_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_start_date">
+          </label>
+          <label class="flex flex-col tracking-wider text-sm">end date
+            <input id="end_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
+          </label>
+        </ul>
       </label>
-      <label class="flex flex-col tracking-wider">Discount exp date
-        <input type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
-      </label>
+      <script>
+        // Get references to the start date and end date input fields
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+
+        // Add an event listener to the start date input
+        startDateInput.addEventListener('input', () => {
+          const startDate = new Date(startDateInput.value);
+          const endDate = new Date(endDateInput.value);
+
+          // Check if the start date is after the end date
+          if (startDate > endDate) {
+            alert('Start date cannot be after end date');
+            startDateInput.value = endDateInput.value; // Clear the input field
+          }
+        });
+
+        // Add an event listener to the end date input
+        endDateInput.addEventListener('input', () => {
+          const startDate = new Date(startDateInput.value);
+          const endDate = new Date(endDateInput.value);
+
+          // Check if the end date is before the start date
+          if (endDate < startDate) {
+            alert('End date cannot be before start date');
+            endDateInput.value = startDateInput.value; // Clear the input field
+          }
+        });
+      </script>
       <label class="tracking-wider -mb-5">Variants</label>
         <ul class="flex flex-col tracking-wider pl-2" id="variantList">
             <li class="flex items-start gap-2">

@@ -215,17 +215,35 @@ class ProductController extends Controller
     if ($currentVar !== null) {
         $combinedVariations[] = $currentVar;
     }
+
     // Get the user's selected local time as a string from the input
-    $localTime = $request->discount_exp_date;
+    $discountExpDateLocalTime = $request->discount_exp_date;
 
     // Convert the local time to a DateTime object
-    $localDateTime = new DateTime($localTime, new DateTimeZone($request->localTimezone));
+    $discountExpDateLocalDateTime = new DateTime($discountExpDateLocalTime, new DateTimeZone($request->localTimezone));
 
     // Convert the local DateTime to UTC DateTime
-    $utcDateTime = $localDateTime->setTimezone(new DateTimeZone('UTC'));
+    $discountExpDateUtcDateTime = $discountExpDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
 
     // Create a UTCDateTime object for MongoDB
-    $discountExpDate = new UTCDateTime($utcDateTime->getTimestamp() * 1000);
+    $discountExpDate = new UTCDateTime($discountExpDateUtcDateTime->getTimestamp() * 1000);
+    
+
+    // Get the user's selected local time as a string from the input
+    $discountStartDateLocalTime = $request->discount_start_date;
+
+    // Convert the local time to a DateTime object
+    $discountStartDateLocalDateTime = new DateTime($discountStartDateLocalTime, new DateTimeZone($request->localTimezone));
+
+    // Convert the local DateTime to UTC DateTime
+    $discountStartDateUtcDateTime = $discountStartDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
+
+    // Create a UTCDateTime object for MongoDB
+    $discountStartDate = new UTCDateTime($discountStartDateUtcDateTime->getTimestamp() * 1000);
+
+    if ($discountStartDate > $discountExpDate) {
+        $discountExpDate = $discountStartDate;
+    }
 
     Product::create([
         'name' => $request->name,
@@ -236,7 +254,8 @@ class ProductController extends Controller
             'price' => floatval($request->price),
             'currency' => $request->currency,
             'discount' => $request->discount,
-            'discount_exp_date' => $discountExpDate
+            'discount_start_date' => $discountStartDate,
+            'discount_exp_date' => $discountExpDate,
         ],
         'wishlist_count' => 0,
         'categories' => $request->categories,
