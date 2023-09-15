@@ -38,22 +38,59 @@
       <label class="tracking-wider">Discount
         <ul class="flex gap-2 pl-2">
           <label class="flex flex-col tracking-wider text-sm">amount
-            <div class="flex">
-              <input type="number" value="0" min="0" max="100" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7 w-20" name="discount"><span class="text-3xl">%</span>
+            <div class="flex gap-2">
+              <input type="number" value="0" min="0" max="100" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7 w-20" name="discount" id="discount"><span class="text-3xl">%</span><span class="text-lg mt-1">-></span><span class="text-lg mt-1" id="discountedPrice">Discounted Price: 0</span>
             </div>
           </label>
           <label class="flex flex-col tracking-wider text-sm">start date
-            <input id="start_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_start_date">
+            <input id="start_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="discount_start_date">
           </label>
           <label class="flex flex-col tracking-wider text-sm">end date
-            <input id="end_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="discount_exp_date">
+            <input id="end_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="discount_exp_date">
           </label>
+          <span id="discountDuration" class="text-lg mt-5">Discount Duration: N/A</span>
         </ul>
       </label>
       <script>
+        const discountInput = document.getElementById('discount');
+        const priceInput = document.querySelector('input[name="price"]');
+        const discountedPriceDisplay = document.getElementById('discountedPrice');
+
+        function calculateDiscountedPrice() {
+            const discountPercentage = parseFloat(discountInput.value);
+            const originalPrice = parseFloat(priceInput.value);
+            
+            if (!isNaN(discountPercentage) && !isNaN(originalPrice)) {
+                const discountedPrice = originalPrice - (originalPrice * (discountPercentage / 100));
+                discountedPriceDisplay.textContent = `Discounted Price: ${discountedPrice.toFixed(2)}`;
+            } else {
+                discountedPriceDisplay.textContent = 'Discounted Price: 0';
+            }
+        }
+
+        discountInput.addEventListener('input', calculateDiscountedPrice)
+        priceInput.addEventListener('input', calculateDiscountedPrice)
         // Get references to the start date and end date input fields
         const startDateInput = document.getElementById('start_date');
         const endDateInput = document.getElementById('end_date');
+        const durationDisplay = document.getElementById('discountDuration');
+
+        function calculateDuration() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+
+            if (!isNaN(startDate) && !isNaN(endDate) && startDate <= endDate) {
+                const durationMilliseconds = endDate - startDate;
+                const days = Math.floor(durationMilliseconds / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((durationMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((durationMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((durationMilliseconds % (1000 * 60)) / 1000);
+
+                durationDisplay.textContent = `Discount Duration: ${days}d, ${hours}h, ${minutes}m, ${seconds}s`;
+            } else {
+                durationDisplay.textContent = 'Discount Duration: Invalid';
+            }
+        }
 
         // Add an event listener to the start date input
         startDateInput.addEventListener('input', () => {
@@ -65,6 +102,7 @@
             alert('Start date cannot be after end date');
             startDateInput.value = endDateInput.value; // Clear the input field
           }
+          calculateDuration();
         });
 
         // Add an event listener to the end date input
@@ -77,6 +115,7 @@
             alert('End date cannot be before start date');
             endDateInput.value = startDateInput.value; // Clear the input field
           }
+          calculateDuration();
         });
       </script>
       <label class="tracking-wider -mb-5">Variants</label>
