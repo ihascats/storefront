@@ -8,11 +8,25 @@
     <form  method="POST" action="{{ route('products.store') }}" class="flex flex-col gap-3">
       @csrf
       <label class="flex flex-col tracking-wider">Name  
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="name">
+        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="name" oninput="updateSlug(this)">
       </label>
-      <label class="flex flex-col tracking-wider">Slug  
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="slug">
+      <label class="flex flex-col tracking-wider">Link
+        <div class="pl-2 w-full flex">
+          <span>product/</span><input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7 pl-0 w-full" name="slug" id="slugInput">
+        </div>
       </label>
+
+      <script>
+        function updateSlug(input) {
+          const nameValue = input.value;
+          const slugInput = document.getElementById('slugInput');
+          
+          // Replace spaces with hyphens and convert to lowercase
+          const slugValue = nameValue.toLowerCase().replace(/\s+/g, '-');
+          
+          slugInput.value = slugValue;
+        }
+      </script>
       <label class="flex flex-col tracking-wider">Price  
         <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="price">
       </label>
