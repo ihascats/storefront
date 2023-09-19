@@ -12,7 +12,7 @@
       </label>
       <label class="flex flex-col tracking-wider">Link
         <div class="pl-2 w-full flex">
-          <span>product/</span><input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7 pl-0 w-full" name="slug" id="slugInput">
+          <span>products/</span><input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7 pl-0 w-full" name="slug" id="slugInput">
         </div>
       </label>
 
