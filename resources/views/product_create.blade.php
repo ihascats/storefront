@@ -28,13 +28,17 @@
         }
       </script>
       <label class="flex flex-col tracking-wider">Price  
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="price">
-      </label>
-      <label class="flex flex-col tracking-wider">Currency  
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="currency">
+        <div class="flex">
+          <input type="number" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 w-36" name="price">
+          <select id="currency-select" name="currency" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 text-xs" value="RSD">
+            <option class="bg-slate-600" value="RSD">RSD (Serbian Dinar)</option>
+            <option class="bg-slate-600" value="EUR">EUR (Euro)</option>
+            <option class="bg-slate-600" value="USD">USD (US Dollar)</option>
+          </select>
+        </div>
       </label>
       <label class="flex flex-col tracking-wider">Description  
-        <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7" name="description">
+        <textarea class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2" name="description" rows="4" cols="50"></textarea>
       </label>
       <label class="tracking-wider">Specifications
         <ul class="pl-2" id="specList">
@@ -56,6 +60,8 @@
               <input type="number" value="0" min="0" max="100" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7 w-20" name="discount" id="discount"><span class="text-3xl">%</span><span class="text-lg mt-1">-></span><span class="text-lg mt-1" id="discountedPrice">Discounted Price: 0</span>
             </div>
           </label>
+        </ul>
+        <ul class="flex gap-2 pl-2">
           <label class="flex flex-col tracking-wider text-sm">start date
             <input id="start_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="discount_start_date">
           </label>
@@ -69,6 +75,7 @@
         const discountInput = document.getElementById('discount');
         const priceInput = document.querySelector('input[name="price"]');
         const discountedPriceDisplay = document.getElementById('discountedPrice');
+        const selectedCurrency = document.getElementById('currency-select');
 
         function calculateDiscountedPrice() {
             const discountPercentage = parseFloat(discountInput.value);
@@ -76,7 +83,7 @@
             
             if (!isNaN(discountPercentage) && !isNaN(originalPrice)) {
                 const discountedPrice = originalPrice - (originalPrice * (discountPercentage / 100));
-                discountedPriceDisplay.textContent = `Discounted Price: ${discountedPrice.toFixed(2)}`;
+                discountedPriceDisplay.textContent = `Discounted Price: ${discountedPrice.toFixed(2)} ${selectedCurrency.value}`;
             } else {
                 discountedPriceDisplay.textContent = 'Discounted Price: 0';
             }
@@ -84,6 +91,7 @@
 
         discountInput.addEventListener('input', calculateDiscountedPrice)
         priceInput.addEventListener('input', calculateDiscountedPrice)
+        selectedCurrency.addEventListener('change', calculateDiscountedPrice)
         // Get references to the start date and end date input fields
         const startDateInput = document.getElementById('start_date');
         const endDateInput = document.getElementById('end_date');
