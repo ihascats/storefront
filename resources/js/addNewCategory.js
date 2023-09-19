@@ -1,4 +1,4 @@
-let categoriesListContainer = document.getElementById("categoriesList");
+let categoriesListContainer = document.getElementById("categoriesDropdown");
 let addCategoryButton = document.getElementById("addCategory");
 let newCategoryInput = document.getElementById("new_category");
 
@@ -28,7 +28,7 @@ function addCategory() {
         // Append the text span to the label
         newCategoryLabel.appendChild(labelText);
 
-        // Insert the new category label after the new_category label
+        // Insert the new category label before the "New Category" input and button
         categoriesListContainer.insertBefore(
             newCategoryLabel,
             addCategoryButton.parentElement.nextElementSibling
