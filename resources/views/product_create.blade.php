@@ -29,29 +29,13 @@
       </script>
       <label class="flex flex-col tracking-wider">Price  
         <div class="flex">
-          <input type="number" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 w-36" name="price">
+          <input type="number" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 w-36" name="price" step="0.01">
           <select id="currency-select" name="currency" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 text-xs" value="RSD">
             <option class="bg-slate-600" value="RSD">RSD (Serbian Dinar)</option>
             <option class="bg-slate-600" value="EUR">EUR (Euro)</option>
             <option class="bg-slate-600" value="USD">USD (US Dollar)</option>
           </select>
         </div>
-      </label>
-      <label class="flex flex-col tracking-wider">Description  
-        <textarea class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2" name="description" rows="4" cols="50"></textarea>
-      </label>
-      <label class="tracking-wider">Specifications
-        <ul class="pl-2" id="specList">
-          <li class="flex items-end gap-2">
-            <label class="flex flex-col tracking-wider w-full text-sm">name  
-              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="spec_name" id="spec_name">
-            </label>
-            <label class="flex flex-col tracking-wider w-full text-sm">description
-              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="spec_desc" id="spec_desc">
-            </label>
-            <button id="addSpec" type="button" class="bg-orange-600 rounded-md px-4 h-7">add</button>
-          </li>
-        </ul>
       </label>
       <label class="tracking-wider">Discount
         <ul class="flex gap-2 pl-2">
@@ -140,6 +124,22 @@
           calculateDuration();
         });
       </script>
+      <label class="flex flex-col tracking-wider">Description  
+        <textarea class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2" name="description" rows="4" cols="50"></textarea>
+      </label>
+      <label class="tracking-wider">Specifications
+        <ul class="pl-2" id="specList">
+          <li class="flex items-end gap-2">
+            <label class="flex flex-col tracking-wider w-full text-sm">name  
+              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="spec_name" id="spec_name">
+            </label>
+            <label class="flex flex-col tracking-wider w-full text-sm">description
+              <input class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="spec_desc" id="spec_desc">
+            </label>
+            <button id="addSpec" type="button" class="bg-orange-600 rounded-md px-4 h-7">add</button>
+          </li>
+        </ul>
+      </label>
       <label class="tracking-wider -mb-5">Variants</label>
       <ul class="flex flex-col tracking-wider pl-2" id="variantList">
           <li class="flex items-start gap-2">
