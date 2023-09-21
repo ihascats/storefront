@@ -53,8 +53,8 @@
       <ul class="flex flex-col tracking-wider pl-2" id="variantList">
           <label class="flex flex-col tracking-wider">Price  
             <div class="flex">
-              <input type="number" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 w-36" name="price" id="price" step="0.01">
-              <select id="currency-select" name="currency" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 text-xs" value="RSD">
+              <input type="number" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 w-36" id="price" step="0.01">
+              <select id="currency-select" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-9 text-xs" value="RSD">
                 <option class="bg-slate-600" value="RSD">RSD (Serbian Dinar)</option>
                 <option class="bg-slate-600" value="EUR">EUR (Euro)</option>
                 <option class="bg-slate-600" value="USD">USD (US Dollar)</option>
@@ -65,16 +65,16 @@
             <ul class="flex gap-2 pl-2">
               <label class="flex flex-col tracking-wider text-sm">amount
                 <div class="flex gap-2">
-                  <input type="number" value="0" min="0" max="100" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7 w-20" name="discount" id="discount"><span class="text-3xl">%</span><span class="text-lg mt-1">-></span><span class="text-lg mt-1" id="discountedPrice">Discounted Price: 0</span>
+                  <input type="number" value="0" min="0" max="100" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7 w-20" id="discount"><span class="text-3xl">%</span><span class="text-lg mt-1">-></span><span class="text-lg mt-1" id="discountedPrice">Discounted Price: 0</span>
                 </div>
               </label>
             </ul>
             <ul class="flex gap-2 pl-2">
               <label class="flex flex-col tracking-wider text-sm">start date
-                <input id="start_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="discount_start_date">
+                <input id="start_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7">
               </label>
               <label class="flex flex-col tracking-wider text-sm">end date
-                <input id="end_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" name="discount_exp_date">
+                <input id="end_date" type="datetime-local" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7">
               </label>
               <span id="discountDuration" class="text-lg mt-5">Discount Duration: N/A</span>
             </ul>
@@ -230,7 +230,7 @@
         });
         
         const discountInput = document.getElementById('discount');
-        const priceInput = document.querySelector('input[name="price"]');
+        const priceInput = document.getElementById('price');
         const discountedPriceDisplay = document.getElementById('discountedPrice');
         const selectedCurrency = document.getElementById('currency-select');
 

@@ -11,7 +11,6 @@ class Product extends Model
         'slug',
         'description',
         'specifications',
-        'price_details',
         'wishlist_count',
         'categories',
         'variants',

@@ -10,71 +10,150 @@ use MongoDB\BSON\UTCDateTime;
 
 class ProductController extends Controller
 {
-  public function search(Request $request){
-
+public function search(Request $request)
+{
     $query = Product::query();
 
     $searchQuery = implode('%', explode(' ', trim($request->input('query'))));
+
     // Search Query
     if ($request->has('query') && trim($request->input('query')) !== '') {
-      $query->where('name', 'like', '%' . $searchQuery . '%');
+        $query->where('name', 'like', '%' . $searchQuery . '%');
     }
 
     // Price Range
     if ($request->has('min-price') && $request->has('max-price')) {
         $minPrice = (float)$request->input('min-price');
         $maxPrice = (float)$request->input('max-price');
-        $query->whereBetween('price_details.price', [$minPrice, $maxPrice]);
-    }
 
+        // Consider discounts when filtering by price range
+        $query->where(function ($query) use ($minPrice, $maxPrice) {
+            $query->orWhere(function ($query) use ($minPrice, $maxPrice) {
+                $query->where('variants.price', '>=', $minPrice)
+                    ->where('variants.price', '<=', $maxPrice);
+            });
 
-    // Categories
-    if ($request->has('categories')) {
-      $categories = $request->input('categories');
-      $query->where(function ($query) use ($categories) {
-        foreach ($categories as $category) {
-            $query->where('categories', 'all', [$category]);
-        }
-      });
-    }
-
-    // // Sizes
-    if ($request->has('sizes')) {
-        $sizes = $request->input('sizes');
-        $query->where(function ($query) use ($sizes) {
-          foreach ($sizes as $size) {
-              $query->where('variants.0.sizes', $size);
-          }
+            $query->orWhere(function ($query) use ($minPrice, $maxPrice) {
+                // Filter by discounted price range
+                $query->where('variants.discount_start_date', '<=', new UTCDateTime(now()->getTimestamp() * 1000))
+                    ->where('variants.discount_exp_date', '>=', new UTCDateTime(now()->getTimestamp() * 1000))
+                    ->where('variants.price - (variants.price * variants.discount / 100)', '>=', $minPrice)
+                    ->where('variants.price - (variants.price * variants.discount / 100)', '<=', $maxPrice);
+            });
         });
     }
 
-    // // Colors
+    // Categories
+    if ($request->has('categories')) {
+        $categories = $request->input('categories');
+        $query->whereIn('categories', $categories);
+    }
+
+    // Sizes
+    if ($request->has('sizes')) {
+        $sizes = $request->input('sizes');
+        $query->where(function ($query) use ($sizes) {
+            foreach ($sizes as $size) {
+                $query->where('variants.sizes', $size);
+            }
+        });
+    }
+
+    // Colors
     if ($request->has('colors')) {
         $colors = $request->input('colors');
         $query->where(function ($query) use ($colors) {
             foreach ($colors as $color) {
-                $query->where('variants.0.color', $color);
+                $query->where('variants.color', $color);
             }
         });
     }
 
     // Execute the query
     $products = $query->get();
-    
-    if (count($products) === 0){
-      // should show user that theres 0 matches for this query
+
+    if ($products->isEmpty()) {
+        // Show a message to the user indicating there are no matches for the query
     }
+    $products->each(function ($product) {
+        $lowestPrice = PHP_FLOAT_MAX;
+        $highestPrice = PHP_FLOAT_MIN;
+
+        foreach ($product->variants as $variant) {
+            $basePrice = $variant["price"];
+            $discount = $variant["discount"] ?? 0; // If discount is not set, default to 0
+            $discountStartDate = $variant["discount_start_date"];
+            $discountExpDate = $variant["discount_exp_date"];
+            $now = now();
+
+            // Calculate the discounted price
+            if ($discount > 0 && $now >= $discountStartDate->toDateTime() && $now <= $discountExpDate->toDateTime()) {
+                $discountedPrice = $basePrice - ($basePrice * $discount / 100);
+                $discountedPrice = number_format($discountedPrice, 2);
+            } else {
+              $discountedPrice = $basePrice;
+            }
+            if ($discountedPrice < $lowestPrice) {
+                $lowestPrice = $discountedPrice;
+            }
+
+            if ($discountedPrice > $highestPrice) {
+                $highestPrice = $discountedPrice;
+            }
+        }
+
+        $product->lowest_price = $lowestPrice;
+        $product->highest_price = $highestPrice;
+    });
+
     return view('products', [
-      'allProducts' => $products,
-      'request' => $request
+        'allProducts' => $products,
+        'request' => $request,
     ]);
+}
+
+  public function index()
+  {
+      $allProducts = Product::all();
+
+      // Calculate lowest and highest prices for each product, considering ongoing discounts
+      $allProducts->each(function ($product) {
+          $lowestPrice = PHP_FLOAT_MAX;
+          $highestPrice = PHP_FLOAT_MIN;
+
+          foreach ($product->variants as $variant) {
+              $basePrice = $variant["price"];
+              $discount = $variant["discount"] ?? 0; // If discount is not set, default to 0
+              $discountStartDate = $variant["discount_start_date"];
+              $discountExpDate = $variant["discount_exp_date"];
+              $now = now();
+
+              // Calculate the discounted price
+              if ($discount > 0 && $now >= $discountStartDate->toDateTime() && $now <= $discountExpDate->toDateTime()) {
+                  $discountedPrice = $basePrice - ($basePrice * $discount / 100);
+                  $discountedPrice = number_format($discountedPrice, 2);
+              } else {
+                $discountedPrice = $basePrice;
+              }
+              if ($discountedPrice < $lowestPrice) {
+                  $lowestPrice = $discountedPrice;
+              }
+
+              if ($discountedPrice > $highestPrice) {
+                  $highestPrice = $discountedPrice;
+              }
+          }
+
+          $product->lowest_price = $lowestPrice;
+          $product->highest_price = $highestPrice;
+      });
+
+      return view('products', [
+          'allProducts' => $allProducts,
+      ]);
   }
-  public function index(){
-    $allProducts = Product::all();
-    return view('products', [
-      'allProducts' => $allProducts,
-    ]);
-  }
+
+
   public function create() {
     $items = Product::all('categories');
     $combinedCategories = [];
@@ -100,14 +179,14 @@ class ProductController extends Controller
     //  -----------------------------
     $product = Product::where('slug', '=', $slug)->first();
     $total_quantity = array_sum($product::max('variants.quantity'));
-    $price = $product->price_details['price'];
+    // $price = $product->price_details['price'];
     // $reviews = Reviews::where('product_id', '=', $product->id);
     // $rating = array_sum(Reviews::where('product_id', '=', $product->id)->avg('rating'));
 
     return view('product', [
         'product' => $product,
         'total_quantity' => $total_quantity,
-        'price' => $price
+        // 'price' => $price
     ]);
   }
 
@@ -140,10 +219,11 @@ class ProductController extends Controller
         //    },
         //    ...
         //  ]
-    $request->price !== null ? $product->price_details["price"] = $request->price : null; //
-    $request->currency !== null ? $product->price_details["currency"] = $request->currency : null; // 
-    $request->discount !== null ? $product->price_details["discount"] = $request->discount : null; // 
-    $request->discount_exp_date !== null ? $product->price_details["discount_exp_date"] = $request->discount_exp_date : null; // 
+
+    // $request->price !== null ? $product->price_details["price"] = $request->price : null; //
+    // $request->currency !== null ? $product->price_details["currency"] = $request->currency : null; // 
+    // $request->discount !== null ? $product->price_details["discount"] = $request->discount : null; // 
+    // $request->discount_exp_date !== null ? $product->price_details["discount_exp_date"] = $request->discount_exp_date : null; // 
     // {
     //    discount: int
     //    expiration_date: date
@@ -198,51 +278,43 @@ class ProductController extends Controller
 
     // Now $combinedSpecifications contains the grouped specifications
     $combinedVariations = [];
-    $currentVar = null;
+    for ($i = 0; $i < count($request->variants); $i += 8) {
+        // Get the user's selected local time as a string from the input
+        $discountStartDateLocalTime = $request->variants[$i + 3]['discount_start_date'];
 
-    foreach($request->variants as $variant){
-      if (isset($variant['color'])) {
-          if ($currentVar !== null) {
-              $combinedVariations[] = $currentVar;
-          }
-          $currentVar['color'] = $variant['color'];
-      } elseif (isset($variant['quantity'])) {
-          $currentVar['quantity'] = intval($variant['quantity']);
-      } elseif (isset($variant['sizes'])) {
-          $currentVar['sizes'] = $variant['sizes'];
-      }
-    }
-    if ($currentVar !== null) {
-        $combinedVariations[] = $currentVar;
-    }
+        // Convert the local time to a DateTime object
+        $discountStartDateLocalDateTime = new DateTime($discountStartDateLocalTime, new DateTimeZone($request->localTimezone));
 
-    // Get the user's selected local time as a string from the input
-    $discountExpDateLocalTime = $request->discount_exp_date;
+        // Convert the local DateTime to UTC DateTime
+        $discountStartDateUtcDateTime = $discountStartDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
 
-    // Convert the local time to a DateTime object
-    $discountExpDateLocalDateTime = new DateTime($discountExpDateLocalTime, new DateTimeZone($request->localTimezone));
+        // Create a UTCDateTime object for MongoDB
+        $discountStartDate = new UTCDateTime($discountStartDateUtcDateTime->getTimestamp() * 1000);
 
-    // Convert the local DateTime to UTC DateTime
-    $discountExpDateUtcDateTime = $discountExpDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
+        // Get the user's selected local time as a string from the input
+        $discountExpDateLocalTime = $request->variants[$i + 4]['discount_exp_date'];
 
-    // Create a UTCDateTime object for MongoDB
-    $discountExpDate = new UTCDateTime($discountExpDateUtcDateTime->getTimestamp() * 1000);
-    
+        // Convert the local time to a DateTime object
+        $discountExpDateLocalDateTime = new DateTime($discountExpDateLocalTime, new DateTimeZone($request->localTimezone));
 
-    // Get the user's selected local time as a string from the input
-    $discountStartDateLocalTime = $request->discount_start_date;
+        // Convert the local DateTime to UTC DateTime
+        $discountExpDateUtcDateTime = $discountExpDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
 
-    // Convert the local time to a DateTime object
-    $discountStartDateLocalDateTime = new DateTime($discountStartDateLocalTime, new DateTimeZone($request->localTimezone));
+        // Create a UTCDateTime object for MongoDB
+        $discountExpDate = new UTCDateTime($discountExpDateUtcDateTime->getTimestamp() * 1000);
 
-    // Convert the local DateTime to UTC DateTime
-    $discountStartDateUtcDateTime = $discountStartDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
+        $variant = [
+            'price' => floatval($request->variants[$i]['price']),
+            'currency' => $request->variants[$i + 1]['currency'],
+            'discount' => intval($request->variants[$i + 2]['discount']),
+            'discount_start_date' => $discountStartDate,
+            'discount_exp_date' => $discountExpDate,
+            'color' => $request->variants[$i + 5]['color'],
+            'sizes' => $request->variants[$i + 6]['sizes'],
+            'quantity' => intval($request->variants[$i + 7]['quantity']),
+        ];
 
-    // Create a UTCDateTime object for MongoDB
-    $discountStartDate = new UTCDateTime($discountStartDateUtcDateTime->getTimestamp() * 1000);
-
-    if ($discountStartDate > $discountExpDate) {
-        $discountExpDate = $discountStartDate;
+        $combinedVariations[] = $variant;
     }
 
     Product::create([
@@ -250,13 +322,6 @@ class ProductController extends Controller
         'slug' => $request->slug,
         'description' => $request->description,
         'specifications' => $combinedSpecifications,
-        'price_details' => [
-            'price' => floatval($request->price),
-            'currency' => $request->currency,
-            'discount' => $request->discount,
-            'discount_start_date' => $discountStartDate,
-            'discount_exp_date' => $discountExpDate,
-        ],
         'wishlist_count' => 0,
         'categories' => $request->categories,
         'variants' => $combinedVariations,

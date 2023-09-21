@@ -8,7 +8,7 @@
       @foreach ($wishlist as $wishlistItem)
          @if(isset($wishlistItem->name))
             <p>Product: {{$wishlistItem->name}}</p>
-            <p>Price: {{$wishlistItem->price_details['price']}}</p>
+            {{-- <p>Price: {{$wishlistItem->price_details['price']}}</p> --}}
             <form method="POST" action="{{ route('wishlists.destroy', ['wishlistItemId' => $wishlistItem->id]) }}" class="flex flex-col">
                @csrf
                @method('DELETE')

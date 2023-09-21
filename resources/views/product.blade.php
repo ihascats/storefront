@@ -6,7 +6,6 @@
    </x-slot>
    <div class="bg-neutral-900 text-white p-4 max-w-7xl mx-auto">
       <h1>TOTAL QUANTITY: {{$total_quantity}}</h1>
-      <h1>Price: ${{$price}}</h1>
       <h1>Name: {{$product->name}}</h1>
       <h1>id: {{$product->id}}</h1>
       <div>Description: {{$product->description}}</div>
@@ -16,7 +15,6 @@
             <div>{{$spec['description']}}</div>
          </div>
       @endforeach
-      <div>Price: {{$price}}</div>
       
       @if(auth()->user()->admin)
       <p>Users Timezone: <span id="user-timezone"></span></p>
@@ -37,31 +35,32 @@
          if(isset($_COOKIE['user_timezone'])) {
             $userTimeZone = $_COOKIE['user_timezone'];
          }
-         
-         $expirationDateUTC = $product->price_details["discount_exp_date"]->toDateTime();
-         $expirationDateLocal = $product->price_details["discount_exp_date"]->toDateTime()->setTimezone(new DateTimeZone($userTimeZone));
          $currentDate = now()->timezone($userTimeZone); // Current date and time in user's timezone
       @endphp
-
-      {{-- <p>Expiration Date (UTC): {{$expirationDateUTC->format('Y-m-d H:i:s')}} ({{$expirationDateUTC->getTimezone()->getName()}})</p>
-      <p>Expiration Date (Local): {{$expirationDateLocal->format('Y-m-d H:i:s')}} ({{$expirationDateLocal->getTimezone()->getName()}})</p>
-      <p>Current Date: {{$currentDate->format('Y-m-d H:i:s')}} ({{$currentDate->getTimezone()->getName()}})</p> --}}
-
-      @if($product->price_details["discount"] > 0 && $expirationDateLocal > $currentDate)
-         <div>Discount: {{$product->price_details["discount"]}}</div>
-         @php
-            $discountedPrice = $product->price_details["price"] - ($product->price_details["price"] * ($product->price_details["discount"] / 100));
-            $discountedPriceFormatted = number_format($discountedPrice, 2);
-         @endphp
-         <div>Price after discount: {{$discountedPriceFormatted}}</div>
-         <div>Discount Expiration Date: {{$expirationDateLocal->format('Y-m-d H:i:s')}}</div>
-      @endif
       
       <div>Wishlist count: {{$product->wishlist_count}}</div>
       <h1>Categories:</h1>
       <div class="pl-2">{{implode(', ', $product->categories)}}</div>
       </ul>
       @foreach ($product->variants as $variant)
+         @php  
+            $expirationDateUTC = $variant["discount_exp_date"]->toDateTime();
+            $expirationDateLocal = $variant["discount_exp_date"]->toDateTime()->setTimezone(new DateTimeZone($userTimeZone));
+            $startDateUTC = $variant["discount_start_date"]->toDateTime();
+            $startDateLocal = $variant["discount_start_date"]->toDateTime()->setTimezone(new DateTimeZone($userTimeZone));
+         @endphp
+         <div>Price: {{$variant["price"]}} {{$variant["currency"]}}</div>
+         @if(now() > $startDateUTC && now() < $expirationDateUTC && $variant["discount"] > 0)
+            <div>Discount: {{$variant["discount"]}}%</div>
+            @php
+               $discountedPrice = $variant["price"] - ($variant["price"] * ($variant["discount"] / 100));
+               $discountedPriceFormatted = number_format($discountedPrice, 2);
+            @endphp
+            <div>Price after discount: {{$discountedPriceFormatted}} {{$variant["currency"]}}</div>
+            <div>Discount Expiration Date: {{$expirationDateLocal->format('Y-m-d H:i:s')}}</div>
+            <p>Expiration Date (UTC): {{$expirationDateUTC->format('Y-m-d H:i:s')}} ({{$expirationDateUTC->getTimezone()->getName()}})</p>
+            <p>Expiration Date (Local): {{$expirationDateLocal->format('Y-m-d H:i:s')}} ({{$expirationDateLocal->getTimezone()->getName()}})</p>
+         @endif
          <div>Color: {{$variant['color']}}</div>
          <div>quantity: {{$variant['quantity']}}</div>
          <div>Sizes: {{$variant['sizes']}}</div>

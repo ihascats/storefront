@@ -10,8 +10,11 @@
         @foreach ($allProducts as $product)
             <a href="/products/{{$product->slug}}">
               <p>Product: {{ $product->name }}</p>
-              
-              <p>Price: {{ $product->price_details['price'] }}</p>
+              @if($product->lowest_price < $product->highest_price)
+                <p>Starting at: {{ $product->lowest_price }}</p>
+              @else
+                <p>Price: {{ $product->highest_price }}</p>
+              @endif
             </a>
         @endforeach
       </div>
