@@ -15,9 +15,11 @@
             <div>{{$spec['description']}}</div>
          </div>
       @endforeach
-      
-      @if(auth()->user()->admin)
-      <p>Users Timezone: <span id="user-timezone"></span></p>
+         
+      @if(isset(auth()->user()->admin))
+         @if(auth()->user()->admin)
+               <p>Users Timezone: <span id="user-timezone"></span></p>
+         @endif
       @endif
 
       <script>
