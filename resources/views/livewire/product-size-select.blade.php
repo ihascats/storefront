@@ -31,6 +31,7 @@
                         name="sizes[]"
                         value="{{ $newSize }}"
                         class="inline float-left"
+                        wire:click="selectSize('{{ $newSize }}')"
                         @if ($selectedSize === $newSize)
                             checked
                         @endif
@@ -49,6 +50,7 @@
                             name="sizes[]"
                             value="{{ $size }}"
                             class="inline float-left"
+                            wire:click="selectSize('{{ $size }}')"
                         >
                         {{ $size }}
                     </label>

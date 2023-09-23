@@ -30,6 +30,7 @@
                         name="colors[]"
                         value="{{ $newColor }}"
                         class="inline float-left"
+                        wire:click="selectColor('{{ $newColor }}')"
                         @if ($selectedColor === $newColor)
                             checked
                         @endif
@@ -48,6 +49,7 @@
                             name="colors[]"
                             value="{{ $color }}"
                             class="inline float-left"
+                            wire:click="selectColor('{{ $color }}')"
                         >
                         {{ $color }}
                     </label>

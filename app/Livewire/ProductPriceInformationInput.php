@@ -15,9 +15,12 @@ class ProductPriceInformationInput extends Component
         return view('livewire.product-price-information-input');
     }
     public function calculateDiscountedPrice() {
+        $this->dispatch('priceUpdated', $this->price);
+        $this->dispatch('discountUpdated', $this->discountAmount);
         $this->discountedPrice = number_format($this->price - ($this->price * ($this->discountAmount / 100)), 2);
     }
     public function setCurrency() {
+        $this->dispatch('currencyUpdated', $this->currency);
         $this->currency;
     }
 

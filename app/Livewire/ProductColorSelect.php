@@ -33,9 +33,15 @@ class ProductColorSelect extends Component
             } else {
                 $this->selectedColor = $trimmedInput;
             }
-
+            $this->dispatch('colorUpdated', $this->selectedColor);
             // Reset the input field
             $this->newColorInput = '';
         }
     }
+    public function selectColor($color)
+    {
+        $this->selectedColor = $color;
+        $this->dispatch('colorUpdated', $color);
+    }
+
 }

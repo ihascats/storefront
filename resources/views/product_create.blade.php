@@ -14,7 +14,7 @@
       </label>
       @livewire('product-specifications')
       
-      <label class="tracking-wider -mb-4">Variants</label>
+      {{-- <label class="tracking-wider -mb-4">Variants</label>
       <ul class="flex flex-col tracking-wider pl-2" id="variantList">
           @livewire('product-price-information-input')
           @livewire('product-discount-date-information')
@@ -26,7 +26,8 @@
               </label>
               <button id="addVariant" type="button" class="bg-orange-600 rounded-md px-4 h-7 mt-6">add</button>
           </li>
-      </ul>
+      </ul> --}}
+      @livewire('product-variant-create')
       @livewire('product-categories-select')
 
       <input id="user-timezone" name="localTimezone" class="h-36 w-36 flex-wrap overflow-hidden" hidden>

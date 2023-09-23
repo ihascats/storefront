@@ -33,9 +33,14 @@ class ProductSizeSelect extends Component
             } else {
                 $this->selectedSize = $trimmedInput;
             }
-
+            $this->dispatch('sizeUpdated', $this->selectedSize);
             // Reset the input field
             $this->newSizeInput = '';
         }
+    }
+
+    public function selectSize($size) {
+        $this->selectedSize = $size;
+        $this->dispatch('sizeUpdated', $size);
     }
 }

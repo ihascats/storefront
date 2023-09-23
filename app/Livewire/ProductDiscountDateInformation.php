@@ -14,13 +14,16 @@ class ProductDiscountDateInformation extends Component
         return view('livewire.product-discount-date-information');
     }
     public function calculateDuration() {
+        $this->dispatch('startDateUpdated', $this->startDate);
+        $this->dispatch('endDateUpdated', $this->startDate);
         if ($this->startDate && $this->endDate) {
             $startDate = new \DateTime($this->startDate);
             $endDate = new \DateTime($this->endDate);
-
+            
             if ($startDate <= $endDate) {
                 $interval = $startDate->diff($endDate);
                 $this->discountDuration = $interval->format('%ad, %hh, %im, %ss');
+
                 return;
             }
         }
