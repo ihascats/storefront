@@ -13,20 +13,6 @@
         <textarea class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2" name="description" rows="4" cols="50"></textarea>
       </label>
       @livewire('product-specifications')
-      
-      {{-- <label class="tracking-wider -mb-4">Variants</label>
-      <ul class="flex flex-col tracking-wider pl-2" id="variantList">
-          @livewire('product-price-information-input')
-          @livewire('product-discount-date-information')
-          <li class="flex items-start gap-2">
-              @livewire('product-color-select')
-              @livewire('product-size-select')
-              <label class="flex flex-col tracking-wider w-full text-sm mt-1">quantity
-                  <input type="number" min="1" value="1" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 h-7" id="variant_quantity">
-              </label>
-              <button id="addVariant" type="button" class="bg-orange-600 rounded-md px-4 h-7 mt-6">add</button>
-          </li>
-      </ul> --}}
       @livewire('product-variant-create')
       @livewire('product-categories-select')
 
