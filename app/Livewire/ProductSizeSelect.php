@@ -10,9 +10,17 @@ class ProductSizeSelect extends Component
     public $newSizes = [];
     public $newSizeInput;
     public $selectedSize = null;
+    public $currentVariant;
     public function render()
     {
         return view('livewire.product-size-select');
+    }
+    public function mount($currentVariant = null)
+    {
+        if ($currentVariant) {
+            $this->currentVariant = $currentVariant;
+            $this->selectedSize = $currentVariant['size'];
+        }
     }
     public function toggleDropdown()
     {
@@ -33,7 +41,9 @@ class ProductSizeSelect extends Component
             } else {
                 $this->selectedSize = $trimmedInput;
             }
-            $this->dispatch('sizeUpdated', $this->selectedSize);
+            if (!$this->currentVariant) {
+                $this->dispatch('sizeUpdated', $this->selectedSize);
+            }
             // Reset the input field
             $this->newSizeInput = '';
         }
@@ -41,6 +51,8 @@ class ProductSizeSelect extends Component
 
     public function selectSize($size) {
         $this->selectedSize = $size;
-        $this->dispatch('sizeUpdated', $size);
+        if (!$this->currentVariant) {
+            $this->dispatch('sizeUpdated', $size);
+        }
     }
 }

@@ -10,9 +10,17 @@ class ProductColorSelect extends Component
     public $newColors = [];
     public $newColorInput;
     public $selectedColor = null;
+    public $currentVariant;
     public function render()
     {
         return view('livewire.product-color-select');
+    }
+    public function mount($currentVariant = null)
+    {
+        if ($currentVariant) {
+            $this->currentVariant = $currentVariant;
+            $this->selectedColor = $currentVariant['color'];
+        }
     }
     public function toggleDropdown()
     {
@@ -33,7 +41,9 @@ class ProductColorSelect extends Component
             } else {
                 $this->selectedColor = $trimmedInput;
             }
-            $this->dispatch('colorUpdated', $this->selectedColor);
+            if (!$this->currentVariant) {
+                $this->dispatch('colorUpdated', $this->selectedColor);
+            }
             // Reset the input field
             $this->newColorInput = '';
         }
@@ -41,7 +51,9 @@ class ProductColorSelect extends Component
     public function selectColor($color)
     {
         $this->selectedColor = $color;
-        $this->dispatch('colorUpdated', $color);
+        if (!$this->currentVariant) {
+            $this->dispatch('colorUpdated', $color);
+        }
     }
 
 }

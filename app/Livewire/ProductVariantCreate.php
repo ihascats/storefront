@@ -90,4 +90,8 @@ class ProductVariantCreate extends Component
 
         }
     }
+
+    public function removeVariant($index) {
+        $this->variantsList[$index]['deleted'] = true;
+    }
 }

@@ -28,7 +28,11 @@
                     <input
                         type="radio"
                         id="size_{{$newSize}}"
+                        @if($currentVariant)
+                        name="variants[][sizes]" 
+                        @else
                         name="sizes[]"
+                        @endif
                         value="{{ $newSize }}"
                         class="inline float-left"
                         wire:click="selectSize('{{ $newSize }}')"
@@ -47,10 +51,17 @@
                         <input
                             type="radio"
                             id="size_{{$size}}"
+                            @if($currentVariant)
+                            name="variants[][sizes]" 
+                            @else
                             name="sizes[]"
+                            @endif
                             value="{{ $size }}"
                             class="inline float-left"
                             wire:click="selectSize('{{ $size }}')"
+                            @if ($selectedSize === $size)
+                                checked
+                            @endif
                         >
                         {{ $size }}
                     </label>

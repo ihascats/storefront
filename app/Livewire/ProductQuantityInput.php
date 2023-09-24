@@ -7,12 +7,22 @@ use Livewire\Component;
 class ProductQuantityInput extends Component
 {
     public $quantity = 1;
+    public $currentVariant;
     public function render()
     {
         return view('livewire.product-quantity-input');
     }
+    public function mount($currentVariant = null)
+    {
+        if ($currentVariant) {
+            $this->currentVariant = $currentVariant;
+            $this->quantity = $currentVariant['quantity'];
+        }
+    }
     
     public function quantityChanged() {
-        $this->dispatch('quantityUpdated', $this->quantity);
+        if (!$this->currentVariant) {
+            $this->dispatch('quantityUpdated', $this->quantity);
+        }
     }
 }

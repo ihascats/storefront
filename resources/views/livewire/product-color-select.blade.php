@@ -50,7 +50,10 @@
                             value="{{ $color }}"
                             class="inline float-left"
                             wire:click="selectColor('{{ $color }}')"
-                        >
+                            @if ($selectedColor === $color)
+                                checked
+                            @endif
+                            >
                         {{ $color }}
                     </label>
                 </li>
