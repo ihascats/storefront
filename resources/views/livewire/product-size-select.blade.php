@@ -29,7 +29,7 @@
                         type="radio"
                         id="size_{{$newSize}}"
                         @if($currentVariant)
-                        name="variants[][sizes]" 
+                        name="variants[{{$index}}][sizes]" 
                         @else
                         name="sizes[]"
                         @endif
@@ -52,7 +52,7 @@
                             type="radio"
                             id="size_{{$size}}"
                             @if($currentVariant)
-                            name="variants[][sizes]" 
+                            name="variants[{{$index}}][sizes]" 
                             @else
                             name="sizes[]"
                             @endif

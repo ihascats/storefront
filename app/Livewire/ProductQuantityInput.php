@@ -8,14 +8,16 @@ class ProductQuantityInput extends Component
 {
     public $quantity = 1;
     public $currentVariant;
+    public $index;
     public function render()
     {
         return view('livewire.product-quantity-input');
     }
-    public function mount($currentVariant = null)
+    public function mount($currentVariant = null, $index = null)
     {
         if ($currentVariant) {
             $this->currentVariant = $currentVariant;
+            $this->index = $index;
             $this->quantity = $currentVariant['quantity'];
         }
     }

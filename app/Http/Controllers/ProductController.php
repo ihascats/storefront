@@ -278,9 +278,9 @@ public function search(Request $request)
 
     // Now $combinedSpecifications contains the grouped specifications
     $combinedVariations = [];
-    for ($i = 0; $i < count($request->variants); $i += 8) {
+    foreach($request->variants as  $index=>$variant) {
         // Get the user's selected local time as a string from the input
-        $discountStartDateLocalTime = $request->variants[$i + 3]['discount_start_date'];
+        $discountStartDateLocalTime = $variant['discount_start_date'];
 
         // Convert the local time to a DateTime object
         $discountStartDateLocalDateTime = new DateTime($discountStartDateLocalTime, new DateTimeZone($request->localTimezone));
@@ -292,7 +292,7 @@ public function search(Request $request)
         $discountStartDate = new UTCDateTime($discountStartDateUtcDateTime->getTimestamp() * 1000);
 
         // Get the user's selected local time as a string from the input
-        $discountExpDateLocalTime = $request->variants[$i + 4]['discount_exp_date'];
+        $discountExpDateLocalTime = $variant['discount_exp_date'];
 
         // Convert the local time to a DateTime object
         $discountExpDateLocalDateTime = new DateTime($discountExpDateLocalTime, new DateTimeZone($request->localTimezone));
@@ -303,20 +303,26 @@ public function search(Request $request)
         // Create a UTCDateTime object for MongoDB
         $discountExpDate = new UTCDateTime($discountExpDateUtcDateTime->getTimestamp() * 1000);
 
+        $imagesArray = [];
+        foreach ($variant['images'] as $image) {
+            $imagesArray[] = 'storefront/' . $request->slug . '/' . $index . '/' . $image;
+        }
+
         $variant = [
-            'price' => floatval($request->variants[$i]['price']),
-            'currency' => $request->variants[$i + 1]['currency'],
-            'discount' => intval($request->variants[$i + 2]['discount']),
+            'images' => $imagesArray,
+            'price' => floatval($variant['price']),
+            'currency' => $variant['currency'],
+            'discount' => intval($variant['discount']),
             'discount_start_date' => $discountStartDate,
             'discount_exp_date' => $discountExpDate,
-            'color' => $request->variants[$i + 5]['color'],
-            'sizes' => $request->variants[$i + 6]['sizes'],
-            'quantity' => intval($request->variants[$i + 7]['quantity']),
+            'color' => $variant['color'],
+            'sizes' => $variant['sizes'],
+            'quantity' => intval($variant['quantity']),
         ];
 
         $combinedVariations[] = $variant;
     }
-
+    print_r($combinedVariations);
     Product::create([
         'name' => $request->name,
         'slug' => $request->slug,

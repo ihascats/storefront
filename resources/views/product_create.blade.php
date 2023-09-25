@@ -16,7 +16,7 @@
       @livewire('product-variant-create')
       @livewire('product-categories-select')
 
-      <input id="user-timezone" name="localTimezone" class="h-36 w-36 flex-wrap overflow-hidden" hidden>
+      <input id="user-timezone" name="localTimezone" class="h-36 w-36 flex-wrap overflow-hidden text-red-500" hidden>
 
       <script>
          // Detect and store the user's timezone in a JavaScript variable

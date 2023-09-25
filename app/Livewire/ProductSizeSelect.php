@@ -11,14 +11,16 @@ class ProductSizeSelect extends Component
     public $newSizeInput;
     public $selectedSize = null;
     public $currentVariant;
+    public $index;
     public function render()
     {
         return view('livewire.product-size-select');
     }
-    public function mount($currentVariant = null)
+    public function mount($currentVariant = null, $index = null)
     {
         if ($currentVariant) {
             $this->currentVariant = $currentVariant;
+            $this->index = $index;
             $this->selectedSize = $currentVariant['size'];
         }
     }

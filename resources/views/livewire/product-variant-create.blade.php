@@ -17,7 +17,7 @@
         @foreach($variantsList as $index=>$variant)
             @if(!isset($variant["deleted"]))
                 <li class="bg-white/10 p-2 rounded-lg">
-                    @livewire('variant-list-item', ['currentVariant' => $variant], key($index))
+                    @livewire('variant-list-item', ['currentVariant' => $variant, 'index' => $index], key($index))
                     <button wire:click="removeVariant({{$index}})" id="removeVariant" type="button" class="bg-red-600 rounded-md px-4 h-7 mt-6 w-full">del</button>
                 </li>
             @endif

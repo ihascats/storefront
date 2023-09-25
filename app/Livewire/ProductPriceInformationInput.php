@@ -11,13 +11,15 @@ class ProductPriceInformationInput extends Component
     public $discountAmount = 0;
     public $discountedPrice = 0;
     public $currentVariant;
+    public $index;
     public function render() {
         return view('livewire.product-price-information-input');
     }
-    public function mount($currentVariant = null)
+    public function mount($currentVariant = null, $index = null)
     {
         if ($currentVariant) {
             $this->currentVariant = $currentVariant;
+            $this->index = $index;
             $this->price = $currentVariant['price'];
             $this->currency = $currentVariant['currency'];
             $this->discountAmount = $currentVariant['discount'];
