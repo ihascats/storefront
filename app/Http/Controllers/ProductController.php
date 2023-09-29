@@ -249,30 +249,20 @@ public function search(Request $request)
 
     // Now $combinedSpecifications contains the grouped specifications
     $combinedVariations = [];
+
+    function setDateTime($dateLocalTime, $localTimezone) {
+        $formatLocalDateTime = new DateTime($dateLocalTime, new DateTimeZone($localTimezone));
+
+        // Convert the local DateTime to UTC DateTime
+        $formatLocalDateTimeToUtc = $formatLocalDateTime->setTimezone(new DateTimeZone('UTC'));
+
+        // Return a UTCDateTime object for MongoDB
+        return new UTCDateTime($formatLocalDateTimeToUtc->getTimestamp() * 1000);
+    }
+
     foreach($request->variants as  $index=>$variant) {
-        // Get the user's selected local time as a string from the input
-        $discountStartDateLocalTime = $variant['discount_start_date'];
-
-        // Convert the local time to a DateTime object
-        $discountStartDateLocalDateTime = new DateTime($discountStartDateLocalTime, new DateTimeZone($request->localTimezone));
-
-        // Convert the local DateTime to UTC DateTime
-        $discountStartDateUtcDateTime = $discountStartDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
-
-        // Create a UTCDateTime object for MongoDB
-        $discountStartDate = new UTCDateTime($discountStartDateUtcDateTime->getTimestamp() * 1000);
-
-        // Get the user's selected local time as a string from the input
-        $discountExpDateLocalTime = $variant['discount_exp_date'];
-
-        // Convert the local time to a DateTime object
-        $discountExpDateLocalDateTime = new DateTime($discountExpDateLocalTime, new DateTimeZone($request->localTimezone));
-
-        // Convert the local DateTime to UTC DateTime
-        $discountExpDateUtcDateTime = $discountExpDateLocalDateTime->setTimezone(new DateTimeZone('UTC'));
-
-        // Create a UTCDateTime object for MongoDB
-        $discountExpDate = new UTCDateTime($discountExpDateUtcDateTime->getTimestamp() * 1000);
+        $discountStartDate = setDateTime($variant['discount_start_date'], $request->localTimezone);
+        $discountExpDate = setDateTime($variant['discount_exp_date'], $request->localTimezone);
 
         $imagesArray = [];
         foreach ($variant['images'] as $image) {

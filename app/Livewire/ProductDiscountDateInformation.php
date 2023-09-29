@@ -19,16 +19,16 @@ class ProductDiscountDateInformation extends Component
     {
         $this->startDate = now()->format('Y-m-d\TH:i');
         $this->endDate = now()->format('Y-m-d\TH:i');
-        $this->calculateDuration();
-        if ($currentVariant && $index) {
+        if ($currentVariant && $index !== null) {
             $this->currentVariant = $currentVariant;
             $this->index = $index;
             $this->startDate = $currentVariant['start_date'];
             $this->endDate = $currentVariant['end_date'];
-            $this->calculateDuration();
         }
+        $this->calculateDuration();
     }
     public function calculateDuration() {
+        // Disables dispatch if the element is created as a part of the form submit list
         if (!$this->currentVariant) {
             $this->dispatch('startDateUpdated', $this->startDate);
             $this->dispatch('endDateUpdated', $this->endDate);
