@@ -155,17 +155,7 @@ public function search(Request $request)
 
 
   public function create() {
-    $items = Product::all('categories');
-    $combinedCategories = [];
-    foreach ($items as $item) {
-      $categories = $item->categories;
-      $combinedCategories = array_merge($combinedCategories, $categories);
-    }
-
-    $uniqueCombinedCategories = array_unique($combinedCategories);
-    return view('product_create', [
-      'categories' => $uniqueCombinedCategories,
-    ]);
+    return view('product_create');
   }
 
   public function show($slug)
@@ -179,14 +169,12 @@ public function search(Request $request)
     //  -----------------------------
     $product = Product::where('slug', '=', $slug)->first();
     $total_quantity = array_sum($product::max('variants.quantity'));
-    // $price = $product->price_details['price'];
     // $reviews = Reviews::where('product_id', '=', $product->id);
     // $rating = array_sum(Reviews::where('product_id', '=', $product->id)->avg('rating'));
 
     return view('product', [
         'product' => $product,
         'total_quantity' => $total_quantity,
-        // 'price' => $price
     ]);
   }
 
@@ -211,23 +199,6 @@ public function search(Request $request)
     //    },
     //    ...
     //  ]
-    //  [
-      //    {
-        //      price: int
-        //      date: date 
-        //      discount: bool
-        //    },
-        //    ...
-        //  ]
-
-    // $request->price !== null ? $product->price_details["price"] = $request->price : null; //
-    // $request->currency !== null ? $product->price_details["currency"] = $request->currency : null; // 
-    // $request->discount !== null ? $product->price_details["discount"] = $request->discount : null; // 
-    // $request->discount_exp_date !== null ? $product->price_details["discount_exp_date"] = $request->discount_exp_date : null; // 
-    // {
-    //    discount: int
-    //    expiration_date: date
-    // }
     $request->wishlist_count !== null ? $product->wishlist_count = $request->wishlist_count : null; // increment / decrement when user adds to a wishlist / removes from
     $request->categories !== null ? $product->categories = $request->categories : null; // list of categories the product belongs to
     //  [
