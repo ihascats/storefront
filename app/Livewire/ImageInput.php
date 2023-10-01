@@ -14,7 +14,6 @@ class ImageInput extends Component
     public function mount($currentVariant = null, $index = null)
     {
         if ($currentVariant) {
-            $this->currentVariant = $currentVariant;
             $this->index = $index;
         }
     }
@@ -29,6 +28,12 @@ class ImageInput extends Component
     public function updatedImages()
     {
         $this->validateOnly('images');
+
+        $names = [];
+        foreach($this->images as $image){
+            $names[] = $image->getClientOriginalName();
+        }
+        $this->dispatch('imagesUpdated', $names, $this->index);
     }
 
     public function render()

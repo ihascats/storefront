@@ -9,7 +9,7 @@
             <input value="{{$currentVariant["color"]}}" name="variants[{{$index}}][color]" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7"> 
         </label>
         <label class="flex flex-col tracking-wider w-full">size
-            <input value="{{$currentVariant["size"]}}" name="variants[{{$index}}][sizes]" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7"> 
+            <input value="{{$currentVariant["sizes"]}}" name="variants[{{$index}}][sizes]" class="bg-white/10 border-l-0 border-r-0 border-t-0 border-b-2 ml-2 h-7"> 
         </label>
         @livewire('product-quantity-input', ['currentVariant' => $currentVariant, 'index' => $index])
     </div>

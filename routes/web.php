@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 Route::get('products', [ProductController::class, 'index'])->name('products');
 
 Route::resource('products', ProductController::class)->only([
-    'create', 'store', 'update', 'destroy'
+    'create', 'update', 'destroy'
 ])->middleware(['auth', 'admin']);
 
 Route::get('products/{id}', [ProductController::class, 'show']);

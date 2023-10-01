@@ -12,16 +12,35 @@
             @foreach($newCategories as $newCategory)
                 <li>
                     <label for="category_{{$newCategory}}" class="pl-2 relative flex gap-2 items-center">
-                        <input type="checkbox" id="category_{{$newCategory}}" name="categories[]" value="{{$newCategory}}" class="inline float-left" checked>
+                        <input
+                            wire:model="selectedCategories"
+                            wire:click="updateSelectedCategories"
+                            type="checkbox"
+                            id="category_{{$newCategory}}"
+                            name="categories[]"
+                            value="{{$newCategory}}"
+                            class="inline float-left"
+                            {{ in_array($newCategory, $selectedCategories) ? 'checked' : '' }}
+                        >
                         {{$newCategory}}
                     </label>
                 </li>
             @endforeach
+
             @if($categories)
                 @foreach($categories as $category)
                     <li>
                         <label for="category_{{$category}}" class="pl-2 relative flex gap-2 items-center">
-                            <input type="checkbox" id="category_{{$category}}" name="categories[]" value="{{$category}}" class="inline float-left">
+                            <input
+                                wire:model="selectedCategories"
+                                wire:click="updateSelectedCategories"
+                                type="checkbox"
+                                id="category_{{$category}}"
+                                name="categories[]"
+                                value="{{$category}}"
+                                class="inline float-left"
+                                {{ in_array($category, $selectedCategories) ? 'checked' : '' }}
+                            >
                             {{$category}}
                         </label>
                     </li>

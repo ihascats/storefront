@@ -17,13 +17,15 @@ class ProductDiscountDateInformation extends Component
     }
     public function mount($currentVariant = null, $index = null)
     {
+        date_default_timezone_set(env('TIMEZONE'));
+
         $this->startDate = now()->format('Y-m-d\TH:i');
         $this->endDate = now()->format('Y-m-d\TH:i');
         if ($currentVariant && $index !== null) {
             $this->currentVariant = $currentVariant;
             $this->index = $index;
-            $this->startDate = $currentVariant['start_date'];
-            $this->endDate = $currentVariant['end_date'];
+            $this->startDate = $currentVariant['discount_start_date'];
+            $this->endDate = $currentVariant['discount_exp_date'];
         }
         $this->calculateDuration();
     }

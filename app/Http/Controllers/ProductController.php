@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use DateTime;
-use DateTimeZone;
 use MongoDB\BSON\UTCDateTime;
 
 class ProductController extends Controller
@@ -224,77 +222,6 @@ public function search(Request $request)
     $product->save();
 
     return response()->json(["result" => "ok, updated"], 200);
-  }
-
-  public function store(Request $request)
-  {
-    $combinedSpecifications = [];
-    $currentSpec = null;
-    if(isset($request->specifications)) {
-      foreach ($request->specifications as $spec) {
-          if (isset($spec['name'])) {
-              if ($currentSpec !== null) {
-                  $combinedSpecifications[] = $currentSpec;
-              }
-              $currentSpec = ['name' => $spec['name']];
-          } elseif (isset($spec['description'])) {
-              $currentSpec['description'] = $spec['description'];
-          }
-      }
-
-      if ($currentSpec !== null) {
-          $combinedSpecifications[] = $currentSpec;
-      }
-    }
-
-    // Now $combinedSpecifications contains the grouped specifications
-    $combinedVariations = [];
-
-    function setDateTime($dateLocalTime, $localTimezone) {
-        $formatLocalDateTime = new DateTime($dateLocalTime, new DateTimeZone($localTimezone));
-
-        // Convert the local DateTime to UTC DateTime
-        $formatLocalDateTimeToUtc = $formatLocalDateTime->setTimezone(new DateTimeZone('UTC'));
-
-        // Return a UTCDateTime object for MongoDB
-        return new UTCDateTime($formatLocalDateTimeToUtc->getTimestamp() * 1000);
-    }
-
-    foreach($request->variants as  $index=>$variant) {
-        $discountStartDate = setDateTime($variant['discount_start_date'], $request->localTimezone);
-        $discountExpDate = setDateTime($variant['discount_exp_date'], $request->localTimezone);
-
-        $imagesArray = [];
-        foreach ($variant['images'] as $image) {
-            $imagesArray[] = 'storefront/' . $request->slug . '/' . $index . '/' . $image;
-        }
-
-        $variant = [
-            'images' => $imagesArray,
-            'price' => floatval($variant['price']),
-            'currency' => $variant['currency'],
-            'discount' => intval($variant['discount']),
-            'discount_start_date' => $discountStartDate,
-            'discount_exp_date' => $discountExpDate,
-            'color' => $variant['color'],
-            'sizes' => $variant['sizes'],
-            'quantity' => intval($variant['quantity']),
-        ];
-
-        $combinedVariations[] = $variant;
-    }
-    print_r($combinedVariations);
-    Product::create([
-        'name' => $request->name,
-        'slug' => $request->slug,
-        'description' => $request->description,
-        'specifications' => $combinedSpecifications,
-        'wishlist_count' => 0,
-        'categories' => $request->categories,
-        'variants' => $combinedVariations,
-    ]);
-
-    return response()->json(["result" => "ok"], 201);
   }
 
 }
